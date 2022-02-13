@@ -1,0 +1,21 @@
+[flake8]
+max-line-length = 120
+
+max-complexity = 17
+
+docstring-style = numpy
+strictness = long
+
+inline-quotes = "
+
+ignore = E501,E203,W503,WPS305,WPS111,WPS231,WPS232,WPS221,WPS237,C408,WPS300
+extend-ignore = D
+per-file-ignores =
+    __init__.py:F401
+exclude =
+    .git
+    __pycache__
+    .venv
+    .mypy_cache
+    .pytest_cache
+    .vscode

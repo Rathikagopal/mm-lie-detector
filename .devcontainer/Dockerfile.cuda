@@ -1,0 +1,43 @@
+ARG CUDA="11.3"
+ARG CUDNN="8"
+FROM nvidia/cuda:11.3.1-cudnn${CUDNN}-devel-ubuntu20.04
+
+ENV DEBIAN_FRONTEND noninteractive
+ENV TZ=Europe/Moscow
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
+    && echo $TZ > /etc/timezone
+
+RUN apt-get update && apt-get install -y ca-certificates wget sudo build-essential git
+
+RUN mkdir /workspace
+WORKDIR /workspace
+
+RUN adduser --disabled-password --gecos "" --shell /bin/bash user \
+    && chown -R user:user /workspace
+RUN echo "user ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/90-user
+USER user
+
+ENV HOME=/home/user
+RUN chmod 777 /home/user
+
+ENV CONDA_DIR=~/.conda
+ENV CONDA_DEFAULT_ENV="base"
+ENV PATH="$CONDA_DIR/bin:$PATH"
+
+RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh \
+    && /bin/bash ~/miniconda.sh -b -p ~/.conda \
+    && rm ~/miniconda.sh
+RUN bash -c "conda init bash"
+
+ARG TORCH_CUDA_ARCH_LIST="ALL"
+ARG TORCH_NVCC_FLAGS="-Xfatbin -compress-all"
+ENV TORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST}"
+ENV TORCH_NVCC_FLAGS="${TORCH_NVCC_FLAGS}"
+ENV FORCE_CUDA="1"
+
+COPY --chown=user:user requirements /workspace/requirements
+RUN bash -c "conda env create -f /workspace/requirements/environment-cuda.yml"
+RUN rm -rf /workspace/requirements
+RUN echo "source activate env >> ~/.bashrc"
+
+CMD ["/bin/bash"]

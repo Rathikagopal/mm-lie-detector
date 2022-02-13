@@ -1,0 +1,6 @@
+torch==1.10.2 --find-links https://download.pytorch.org/whl/cu113/torch_stable.html
+torchvision==0.11.3 --find-links https://download.pytorch.org/whl/cu113/torch_stable.html
+torchaudio==0.10.2 --find-links https://download.pytorch.org/whl/cu113/torch_stable.html
+
+mmcv-full==1.4.4 --find-links https://download.openmmlab.com/mmcv/dist/cu113/torch1.10.0/index.html
+mmdet==2.21.0

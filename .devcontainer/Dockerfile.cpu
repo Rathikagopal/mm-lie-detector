@@ -1,0 +1,38 @@
+FROM --platform=linux/x86_64 ubuntu:20.04
+ARG PYTHON="3.9"
+
+ENV DEBIAN_FRONTEND noninteractive
+ENV TZ=Europe/Moscow
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
+    && echo $TZ > /etc/timezone
+
+RUN apt-get update && apt-get install -y ca-certificates wget sudo build-essential git
+
+RUN apt-get install -y libsndfile1-dev
+
+RUN mkdir /workspace
+WORKDIR /workspace
+
+RUN adduser --disabled-password --gecos "" --shell /bin/bash user \
+    && chown -R user:user /workspace
+RUN echo "user ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/90-user
+USER user
+
+ENV HOME=/home/user
+RUN chmod 777 /home/user
+
+ENV CONDA_DIR=~/.conda
+ENV CONDA_DEFAULT_ENV="base"
+ENV PATH="$CONDA_DIR/bin:$PATH"
+
+RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh \
+    && /bin/bash ~/miniconda.sh -b -p ~/.conda \
+    && rm ~/miniconda.sh
+RUN bash -c "conda init bash"
+
+COPY --chown=user:user requirements /workspace/requirements
+RUN bash -c "conda env create -f /workspace/requirements/environment-cpu.yml"
+RUN rm -rf /workspace/requirements
+RUN bash -c "echo source activate env >> /home/user/.bashrc"
+
+CMD ["/bin/bash"]
