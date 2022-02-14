@@ -2,13 +2,13 @@ name: env
 
 channels:
   - defaults
+  - conda-forge
 
 dependencies:
   - python=3.9
   - pip
 
-  - cudatoolkit=11.3
+  - cudatoolkit-dev=11.3
 
   - pip:
-    - -r requirements.txt
-    - -r requirements-cuda.txt
+      - -r requirements.txt

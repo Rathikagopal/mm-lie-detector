@@ -5,9 +5,11 @@ import torch
 import torch.nn as nn
 import torchaudio
 
+from ...registry import registry
 from .main import main
 
 
+@registry.register_module()
 class AudioFeatures(nn.Module):
     def __init__(self, fps: int = 30, chunk_length=1, sr=48000, normalization: bool = True):
         super().__init__()

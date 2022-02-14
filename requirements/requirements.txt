@@ -9,3 +9,5 @@ moviepy==1.0.3
 pandas==1.4.0
 Signal_Analysis==0.1.26
 av==8.1.0
+mediapipe==0.8.9.1
+vg==2.0.0

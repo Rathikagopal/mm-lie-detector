@@ -12,13 +12,11 @@ from torch.nn.modules.utils import _pair
 
 from mmcv import ConfigDict
 from mmcv.cnn import build_conv_layer, build_norm_layer, kaiming_init
-from mmcv.cnn.bricks.transformer import build_transformer_layer_sequence
 from mmcv.cnn.utils.weight_init import trunc_normal_
 from mmcv.runner import _load_checkpoint, load_state_dict
 from mmdet.utils.logger import get_root_logger
 
-from ..registry import registry
-
+from ..registry import registry, build
 
 class PatchEmbed(nn.Module):
     def __init__(
@@ -185,7 +183,7 @@ class TimeSformer(nn.Module):
                 )
             )
 
-        self.transformer_layers = build_transformer_layer_sequence(transformer_layers)
+        self.transformer_layers = build(transformer_layers)
 
     def init_weights(self, pretrained=None):
         """Initiate the parameters either from existing checkpoint or from

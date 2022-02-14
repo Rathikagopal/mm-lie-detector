@@ -9,6 +9,8 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
 
 RUN apt-get update && apt-get install -y ca-certificates wget sudo build-essential git
 
+RUN apt-get install -y libsndfile1-dev
+
 RUN mkdir /workspace
 WORKDIR /workspace
 
@@ -34,6 +36,7 @@ ARG TORCH_NVCC_FLAGS="-Xfatbin -compress-all"
 ENV TORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST}"
 ENV TORCH_NVCC_FLAGS="${TORCH_NVCC_FLAGS}"
 ENV FORCE_CUDA="1"
+ENV MMCV_WITH_OPS="1"
 
 COPY --chown=user:user requirements /workspace/requirements
 RUN bash -c "conda env create -f /workspace/requirements/environment-cuda.yml"

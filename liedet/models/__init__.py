@@ -1,2 +1,3 @@
 from .backbones import AST, AttentionBottleneckTransformer, TimeSformer
-from .heads import IoUAwareRetinaHead, TimeSformerHead
+from .detectors import AudioFeatures, LandmarksFeatures
+from .heads import ASTHead, IoUAwareRetinaHead, TimeSformerHead
