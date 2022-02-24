@@ -79,8 +79,8 @@ class VideoFolder(Dataset):
 
     def split(
         self,
-        test_size: float = 0.1,
-        valid_size: float = 0.0,
+        test_size: float = 0.0,
+        valid_size: float = 0.2,
         by_file: bool = False,
         balanced: str = "over",
         shuffle: bool = True,
