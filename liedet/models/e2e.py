@@ -93,6 +93,13 @@ class LieDetector(nn.Module):
 
 
 class LieDetectorRunner(dl.Runner):
+    @torch.no_grad()
+    def predict_batch(self, batch):
+        logits = self.model(batch)
+        probs = torch.sigmoid(logits).argmax(dim=1)
+
+        return probs
+
     def handle_batch(self, batch):
         _, _, labels = batch["vframes"], batch["aframes"], batch["labels"]
 
