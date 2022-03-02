@@ -6,13 +6,19 @@ import torch.nn as nn
 
 from mmcv.cnn import build_norm_layer, constant_init
 from mmcv.cnn.bricks.transformer import FFN, build_dropout
+from mmcv.cnn.builder import build_from_cfg
 from mmcv.runner.base_module import BaseModule
 from mmcv.utils import digit_version
 
-from ..registry import registry
+
+class TransformerEncoder(nn.TransformerEncoder):
+    def __init__(self, encoder_layer, num_layers, norm=None):
+        encoder_layer = build_from_cfg(cfg=encoder_layer)
+        norm = build_from_cfg(cfg=norm) if norm is not None else None
+
+        super().__init__(encoder_layer=encoder_layer, num_layers=num_layers, norm=norm)
 
 
-@registry.register_module()
 class DividedTemporalAttentionWithNorm(BaseModule):
     """Temporal Attention in Divided Space Time Attention.
 
@@ -88,7 +94,6 @@ class DividedTemporalAttentionWithNorm(BaseModule):
         return new_query
 
 
-@registry.register_module()
 class DividedSpatialAttentionWithNorm(BaseModule):
     """Spatial Attention in Divided Space Time Attention.
 
@@ -173,7 +178,6 @@ class DividedSpatialAttentionWithNorm(BaseModule):
         return new_query
 
 
-@registry.register_module()
 class FFNWithNorm(FFN):
     """FFN with pre normalization layer.
 

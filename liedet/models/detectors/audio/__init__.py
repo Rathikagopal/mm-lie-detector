@@ -19,9 +19,14 @@ class AudioFeatures(nn.Module):
         self.sample_rate = sr
         self.normalization = normalization
 
+    @torch.no_grad()
     def forward(self, x):
+        batch_size = x.size(0)
+        device = x.device
+
+        x = x.cpu()
         h = []
-        for i in range(x.size(0)):
+        for i in range(batch_size):
             tmp_path = uuid.uuid4()
             tmp_path = f"/tmp/{tmp_path}.wav"
             torchaudio.save(tmp_path, x[i], self.sample_rate)
@@ -30,6 +35,7 @@ class AudioFeatures(nn.Module):
                 audio_path=tmp_path,
                 fps=self.video_fps,
                 normalization=self.normalization,
+                sr=self.sample_rate,
                 chunk_length=self.chunk_length,
                 csv=False,
             )
@@ -37,4 +43,4 @@ class AudioFeatures(nn.Module):
 
             os.remove(tmp_path)
 
-        return torch.stack(h, dim=0)
+        return torch.stack(h, dim=0).to(device)

@@ -1,6 +1,7 @@
-torch==1.10.2 --no-binary :torch:
-torchvision==0.11.3 --no-binary :torchvision:
-torchaudio==0.10.2 --no-binary :torchaudio:
+torch==1.10.2+cu113
+torchvision==0.11.3+cu113
+torchaudio==0.10.2+cu113
 
-mmcv-full==1.4.4 --no-binary :mmcv-full:
-mmdet==2.21.0 --no-binary :mmdet:
+mmcv-full==1.4.6
+mmdet==2.22.0
+mmaction2==0.21.0

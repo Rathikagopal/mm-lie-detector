@@ -35,6 +35,7 @@ def features_to_timeseries(
         volume.chunks,
         volume.voice,
     )
+
     volume.analyze_fragment()
     volume.count_changes()
     results.update(volume.get_results())
@@ -129,6 +130,7 @@ def main(
     normalization=True,
     name=False,
     chunk_length=1,
+    sr=22050,
     csv=True,
     model_path=str(Path(__file__).parent / "weights/Torch_model.pth"),
     device="cpu",
@@ -136,13 +138,14 @@ def main(
 ):
     # Отключение вывода в консоль (функция get_jitter выводит тип объекта)
     # sys.stdout = open(os.devnull, "w")
-    if video_path:
+    if video_path is not None:
         results = features_to_timeseries(
             video_path=video_path,
             signal=None,
             model_path=model_path,
             device=device,
             chunk_length=chunk_length,
+            sr=sr,
             normalization=normalization,
         )
     else:
@@ -151,6 +154,7 @@ def main(
             model_path=model_path,
             device=device,
             chunk_length=chunk_length,
+            sr=sr,
             normalization=normalization,
         )
     out = to_fps(fps=fps, results=results, audio_path=audio_path, csv=csv, output_path=output_path, name=name)

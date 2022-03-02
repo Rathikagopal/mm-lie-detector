@@ -16,7 +16,8 @@ from mmcv.cnn.utils.weight_init import trunc_normal_
 from mmcv.runner import _load_checkpoint, load_state_dict
 from mmdet.utils.logger import get_root_logger
 
-from ..registry import registry, build
+from ..registry import build, registry
+
 
 class PatchEmbed(nn.Module):
     def __init__(
@@ -74,7 +75,8 @@ class TimeSformer(nn.Module):
         in_channels: int = 3,
         dropout_ratio: float = 0.0,
         transformer_layers=None,
-        pretrained: str | None = None,
+        pretrained: str
+        | None = "https://download.openmmlab.com/mmaction/recognition/timesformer/vit_base_patch16_224.pth",
         attention_type: str = "divided_space_time",
         norm_cfg: dict[str, Any] = dict(type="LN", eps=1e-6),
         **kwargs,
@@ -116,21 +118,25 @@ class TimeSformer(nn.Module):
                     dict(
                         type="BaseTransformerLayer",
                         attn_cfgs=[
-                            dict(
-                                type="DividedTemporalAttentionWithNorm",
-                                embed_dims=embed_dims,
-                                num_heads=num_heads,
-                                num_frames=num_frames,
-                                dropout_layer=dict(type="DropPath", drop_prob=dpr[i]),
-                                norm_cfg=dict(type="LN", eps=1e-6),
+                            build(
+                                dict(
+                                    type="DividedTemporalAttentionWithNorm",
+                                    embed_dims=embed_dims,
+                                    num_heads=num_heads,
+                                    num_frames=num_frames,
+                                    dropout_layer=dict(type="DropPath", drop_prob=dpr[i]),
+                                    norm_cfg=dict(type="LN", eps=1e-6),
+                                )
                             ),
-                            dict(
-                                type="DividedSpatialAttentionWithNorm",
-                                embed_dims=embed_dims,
-                                num_heads=num_heads,
-                                num_frames=num_frames,
-                                dropout_layer=dict(type="DropPath", drop_prob=dpr[i]),
-                                norm_cfg=dict(type="LN", eps=1e-6),
+                            build(
+                                dict(
+                                    type="DividedSpatialAttentionWithNorm",
+                                    embed_dims=embed_dims,
+                                    num_heads=num_heads,
+                                    num_frames=num_frames,
+                                    dropout_layer=dict(type="DropPath", drop_prob=dpr[i]),
+                                    norm_cfg=dict(type="LN", eps=1e-6),
+                                )
                             ),
                         ],
                         ffn_cfgs=dict(
@@ -250,4 +256,4 @@ class TimeSformer(nn.Module):
 
         x = self.norm(x)
 
-        return x
+        return x[:, 0]

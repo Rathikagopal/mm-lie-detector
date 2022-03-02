@@ -1,6 +1,7 @@
-torch==1.10.2 --find-links https://download.pytorch.org/whl/cpu/torch_stable.html
-torchvision==0.11.3 --find-links https://download.pytorch.org/whl/cpu/torch_stable.html
-torchaudio==0.10.2 --find-links https://download.pytorch.org/whl/cpu/torch_stable.html
+torch==1.10.2+cpu
+torchvision==0.11.3+cpu
+torchaudio==0.10.2+cpu
 
-mmcv==1.4.4
-mmdet==2.21.0
+mmcv-full==1.4.6
+mmdet==2.22.0
+mmaction2==0.21.0

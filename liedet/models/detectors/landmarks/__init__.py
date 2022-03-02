@@ -11,17 +11,23 @@ from ...registry import registry
 from .utils import landmarks
 
 
-@registry.register_module()
+@registry.register_module(name="Landmarks")
 class LandmarksFeatures(nn.Module):
     def __init__(self, fps: int = 30):
         super().__init__()
 
         self.video_fps = fps
 
+    @torch.no_grad()
     def forward(self, x):
+        batch_size = x.size(0)
+        time_size = x.size(1)
+        device = x.device
+        x = x.cpu().numpy()
+
         h = []
 
-        for i in range(x.size(0)):
+        for i in range(batch_size):
             tmp_path = uuid.uuid4()
             tmp_path = f"/tmp/{tmp_path}.mp4"
 
@@ -46,6 +52,12 @@ class LandmarksFeatures(nn.Module):
 
             os.remove(tmp_path)
 
+            dT = time_size - len(landmarks_data)
+
+            if dT > 0:
+                landmarks_data = landmarks_data + [landmarks_data[-1]] * dT
+            landmarks_data = landmarks_data[:time_size]
+
             h.append(landmarks_data)
 
-        return torch.tensor(h, dtype=torch.float)
+        return torch.tensor(h, dtype=torch.float).to(device)

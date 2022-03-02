@@ -11,3 +11,4 @@ Signal_Analysis==0.1.26
 av==8.1.0
 mediapipe==0.8.9.1
 vg==2.0.0
+catalyst==22.2.1

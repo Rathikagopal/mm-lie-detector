@@ -234,7 +234,8 @@ class FaceDetector(object):
 
             pre_initial = torch.tensor(pre_initial).flatten().float().to(device)
 
-            output = model(pre_initial).detach().cpu().numpy()
+            with torch.no_grad():
+                output = model(pre_initial).cpu().numpy()
 
             x_angle = -output[0]
             y_angle = -output[1]

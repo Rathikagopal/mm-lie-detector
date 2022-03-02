@@ -11,4 +11,7 @@ dependencies:
   - cudatoolkit-dev=11.3
 
   - pip:
+      - --find-links https://download.pytorch.org/whl/cu113/torch_stable.html
+      - --find-links https://download.openmmlab.com/mmcv/dist/cu113/torch1.10.0/index.html
+      - -r requirements-cuda.txt
       - -r requirements.txt

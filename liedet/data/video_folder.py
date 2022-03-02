@@ -7,7 +7,9 @@ from typing import Any, Optional
 import cv2
 import numpy as np
 
+import torch
 from torch.utils.data import Dataset
+from torchvision import transforms as V
 
 from .video_reader import VideoReader
 
@@ -20,6 +22,8 @@ class VideoFolder(Dataset):
         pattern: str = ".mp4",
         shuffle: bool = False,
         seed: int | None = None,
+        vtransform: V.Compose | None = None,
+        atransform: V.Compose | None = None,
         vr_kwargs: Optional[dict] = None,
         **kwargs,
     ):
@@ -39,6 +43,10 @@ class VideoFolder(Dataset):
         self.rng = np.random.default_rng(seed=seed)
         if self.shuffle:
             self.order = self.reshuffle()
+        self.order = self.order[:5000]
+
+        self.vtransform = vtransform
+        self.atransform = atransform
 
     def get_files(self) -> list[str]:
         pathname = f"{self.folder_path}/**/*{self.pattern}"
@@ -57,7 +65,7 @@ class VideoFolder(Dataset):
             [
                 (i, j * self.window)
                 for i, num_frames in enumerate(self.per_file_frames_num)
-                for j in range(int(num_frames // self.window))
+                for j in range(int(num_frames // self.window) - 1)
             ]
         )
 
@@ -82,7 +90,7 @@ class VideoFolder(Dataset):
         test_size: float = 0.0,
         valid_size: float = 0.2,
         by_file: bool = False,
-        balanced: str = "over",
+        balanced: str = "under",
         shuffle: bool = True,
     ) -> dict[str, "VideoFolder"]:
         train_set = copy.deepcopy(self)
@@ -113,7 +121,7 @@ class VideoFolder(Dataset):
         train_ids: list[int] = []
         test_ids: list[int] = []
         valid_ids: list[int] = []
-        for label, ids in per_class_ids:
+        for label, ids in per_class_ids.items():
             train_class_ids, test_class_ids, valid_class_ids = [], [], []
             if shuffle:
                 self.rng.shuffle(ids)
@@ -138,7 +146,7 @@ class VideoFolder(Dataset):
 
             train_ids.extend(train_class_ids)
             test_ids.extend(test_class_ids)
-            valid_ids.extend(valid_ids)
+            valid_ids.extend(valid_class_ids)
 
         if by_file:
             train_set.order = self.order[np.isin(self.order[:, 0], train_ids), :]
@@ -150,9 +158,9 @@ class VideoFolder(Dataset):
             valid_set.order = self.order[valid_ids, :]
 
         return {
-            "train": train_set,
-            "test": test_set,
-            "valid": valid_set,
+            "train_set": train_set,
+            "test_set": test_set,
+            "valid_set": valid_set,
         }
 
     def __len__(self) -> int:
@@ -166,6 +174,11 @@ class VideoFolder(Dataset):
         frames = vr[start_frame_idx : start_frame_idx + self.window]
         if len(frames["vframes"]) < self.window:
             frames = vr[-self.window :]
+
+        if self.vtransform is not None:
+            frames["vframes"] = self.vtransform(frames["vframes"])
+        if self.atransform is not None:
+            frames["aframes"] = self.atransform(frames["aframes"])
         label = self.labels[file_idx]
 
         return {"labels": label, **frames}

@@ -1,6 +1,9 @@
 from __future__ import annotations
 
-from typing import Optional
+from collections import OrderedDict
+from typing import Any, Mapping, Optional
+
+from mmaction.models.builder import MODELS as MMACTION_MODELS
 
 import torch.nn as nn
 from torch.nn import modules as TORCH_MODULES  # noqa: N812
@@ -22,8 +25,9 @@ from mmcv.cnn.bricks.registry import (
     UPSAMPLE_LAYERS,
 )
 from mmcv.cnn.bricks.wrappers import Linear, MaxPool2d, MaxPool3d
-from mmcv.utils import Registry
+from mmcv.utils import ConfigDict, Registry
 from mmcv.utils.logging import get_logger, logger_initialized
+from mmdet.models.builder import MODELS as MMDET_MODELS
 
 from .builder import recursive_build
 
@@ -51,6 +55,8 @@ registries = [
     TRANSFORMER_LAYER,
     TRANSFORMER_LAYER_SEQUENCE,
     UPSAMPLE_LAYERS,
+    MMDET_MODELS,
+    MMACTION_MODELS,
 ]
 
 for reg in registries:
@@ -109,7 +115,8 @@ def build(
             if prev_level < 30:
                 logger.setLevel("WARNING")
 
-        module.init_weights()
+        if not isinstance(module, nn.Parameter) and hasattr(module, "init_weights"):
+            module.init_weights()
 
         if not print_init_info:
             if prev_level < 30:
@@ -119,3 +126,23 @@ def build(
 
 
 registry.build_func = build
+
+
+@registry.register_module(force=True)
+class Sequential(nn.Sequential):
+    def __init__(self, *args, modules: list | None = None):
+        super().__init__()
+
+        if modules is not None:
+            args = modules
+
+        if len(args) == 1 and isinstance(args[0], (OrderedDict, ConfigDict)):
+            for key, module in args[0].items():
+                if isinstance(module, dict):
+                    module = build(cfg=module, registry=registry)
+                self.add_module(key, module)
+        else:
+            for idx, module in enumerate(args):
+                if isinstance(module, dict):
+                    module = build(cfg=module, registry=registry)
+                self.add_module(str(idx), module)

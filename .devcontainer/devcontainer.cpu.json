@@ -1,12 +1,9 @@
 {
     "name": "mm-lie-detector",
     "build": {
-        "dockerfile": "Dockerfile.cuda",
+        "dockerfile": "Dockerfile.cpu",
         "context": "../",
     },
-    "runArgs": [
-        "--gpus=all",
-    ],
     "extensions": [
         "ms-python.python",
         "ms-python.vscode-pylance",

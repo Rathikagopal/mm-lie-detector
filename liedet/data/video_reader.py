@@ -4,8 +4,9 @@ import decord
 
 import torch
 from torch.utils.data import Dataset
+from torchaudio import transforms as A
 from torchvision import io
-from torchvision import transforms as T
+from torchvision import transforms as V
 
 
 class VideoReader(Dataset):
@@ -14,8 +15,8 @@ class VideoReader(Dataset):
         uri: str,
         mono: bool = True,
         bridge: str = "torch",
-        vtransform: T.Compose | None = None,
-        atransform: T.Compose | None = None,
+        vtransform: V.Compose | None = None,
+        atransform: V.Compose | None = None,
         **kwargs,
     ):
         decord.bridge.set_bridge(new_bridge=bridge)
@@ -49,15 +50,11 @@ class VideoReader(Dataset):
         if isinstance(idx, slice):
             aframes, vframes = self.reader[idx]
             aframes = torch.cat(aframes, dim=-1)
-            C, L = aframes.shape
-            dL = int(vframes.shape[0] / self.meta["video_fps"] * self.meta["audio_fps"] - L)
-            dL = dL if dL > 0 else 0
-            aframes = torch.cat((aframes, torch.zeros(C, dL)), dim=1)
 
             if self.vtransform is not None:
                 vframes = torch.stack([self.vtransform(vframe) for vframe in vframes])
             if self.atransform is not None:
-                aframes = torch.stack([self.atransform(aframe) for aframe in aframes])
+                aframes = self.atransform(aframes)
         else:
             aframes, vframes = self.reader[idx]
 

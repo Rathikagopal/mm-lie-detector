@@ -32,9 +32,7 @@ RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86
     && rm ~/miniconda.sh
 RUN bash -c "conda init bash"
 
-ARG TORCH_CUDA_ARCH_LIST="ALL"
 ARG TORCH_NVCC_FLAGS="-Xfatbin -compress-all"
-ENV TORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST}"
 ENV TORCH_NVCC_FLAGS="${TORCH_NVCC_FLAGS}"
 ENV FORCE_CUDA="1"
 ENV MMCV_WITH_OPS="1"
