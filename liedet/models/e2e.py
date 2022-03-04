@@ -5,6 +5,7 @@ from catalyst import dl
 import torch
 import torch.nn as nn
 
+from mmcv.cnn.utils.weight_init import kaiming_init, trunc_normal_
 from mmcv.utils import ConfigDict
 
 from .registry import build, registry
@@ -67,7 +68,7 @@ class LieDetector(nn.Module):
         if self.video_model is not None and self.audio_model is not None:
             logits = torch.cat((vfeatures, afeatures), dim=-1)
             del vfeatures, afeatures
-        elif self.model is not None:
+        elif self.video_model is not None:
             logits = vfeatures
         else:
             logits = afeatures
@@ -90,6 +91,13 @@ class LieDetector(nn.Module):
         logits = self.cls_head(logits)
 
         return logits
+
+    def init_weights(self):
+        trunc_normal_(self.pos_embeds, std=0.02)
+        trunc_normal_(self.cls_tokens, std=0.02)
+
+        if isinstance(self.embed, nn.Linear):
+            kaiming_init(self.embed, mode="fan_in", nonlinearity="linear")
 
 
 class LieDetectorRunner(dl.Runner):
