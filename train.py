@@ -1,22 +1,20 @@
-import os
+from catalyst import dl
 
-from catalyst import dl, metrics
-
-import torch
 import torch.nn as nn
 from torch import optim
-from torch.nn import functional as F
 from torch.utils.data import DataLoader
 
 from mmcv.utils import Config
 
 from liedet.datasets import build_dataset
-from liedet.models.e2e import LieDetector, LieDetectorRunner
+from liedet.models.e2e import LieDetectorRunner
 from liedet.models.registry import build
 
-# cfg = "configs/train/landmarks_audio_transformer.py"
-# cfg = "configs/train/tinaface_r50_audio_transformer.py"
-cfg = "configs/train/tinaface_audio_transformer.py"
+cfg = "configs/tinaface_r3d.py"
+# cfg = "configs/landmarks_transformer.py"
+# cfg = "configs/landmarks_audio_transformer.py"
+# cfg = "configs/tinaface_r50_audio_transformer.py"
+# cfg = "configs/tinaface_audio_transformer.py"
 cfg = Config.fromfile(cfg)
 
 dataset = build_dataset(cfg.dataset)
@@ -28,7 +26,7 @@ loaders = dict(
 
 
 model = build(cfg.model)
-optimizer = optim.Adam(model.parameters())
+optimizer = optim.Adam(model.parameters(), lr=1e-3)
 criterion = nn.CrossEntropyLoss()
 
 runner = LieDetectorRunner()
@@ -44,6 +42,7 @@ runner.train(
     minimize_valid_metric=False,
     callbacks=[
         dl.CriterionCallback(input_key="logits", target_key="labels", metric_key="loss"),
+        dl.BackwardCallback(metric_key="loss"),
         dl.OptimizerCallback(metric_key="loss", accumulation_steps=int(64 // cfg.batch_size)),
         dl.AccuracyCallback(input_key="logits", target_key="labels", num_classes=2),
         dl.EarlyStoppingCallback(patience=15, loader_key="valid_loader", metric_key="loss", minimize=True),

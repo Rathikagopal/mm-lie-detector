@@ -1,7 +1,7 @@
 {
     "name": "mm-lie-detector",
     "build": {
-        "dockerfile": "Dockerfile.cuda",
+        "dockerfile": "Dockerfile.cu113",
         "context": "../",
     },
     "runArgs": [

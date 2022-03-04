@@ -11,3 +11,4 @@ dependencies:
     - --find-links https://download.pytorch.org/whl/cpu/torch_stable.html
     - -r requirements.txt
     - -r requirements-cpu.txt
+    - -r dev-requirements.txt

@@ -1,6 +1,4 @@
-ARG CUDA="11.3"
-ARG CUDNN="8"
-FROM nvidia/cuda:11.3.1-cudnn${CUDNN}-devel-ubuntu20.04
+FROM nvidia/cuda:10.2-cudnn8-devel-ubuntu18.04
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV TZ=Europe/Moscow
@@ -38,8 +36,8 @@ ENV FORCE_CUDA="1"
 ENV MMCV_WITH_OPS="1"
 
 COPY --chown=user:user requirements /workspace/requirements
-RUN bash -c "conda env create -f /workspace/requirements/environment-cuda.yml"
+RUN bash -c "conda env create -f /workspace/requirements/environment-cu102.yml"
 RUN rm -rf /workspace/requirements
-RUN echo "source activate env >> ~/.bashrc"
+RUN bash -c "echo source activate env >> /home/user/.bashrc"
 
 CMD ["/bin/bash"]
