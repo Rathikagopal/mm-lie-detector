@@ -177,8 +177,8 @@
 
 ```txt
 ...
-liedet/
-requirements/
+assets/
+configs
 ...
 data/
     |
@@ -191,6 +191,10 @@ data/
         2059949_12/
         ...
     ...
+...
+liedet/
+requirements/
+weights/
 ...
 ```
 

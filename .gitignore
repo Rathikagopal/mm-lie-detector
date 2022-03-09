@@ -2,7 +2,7 @@ data
 !liedet/data
 logs
 
-weights
+weights/*
 .weights
 !weights/.gitkeep
 .configs
@@ -11,7 +11,7 @@ weights
 .landmarks
 run.py
 
-assets
+assets/*
 !assets/.gitkeep
 
 .mypy_cache
