@@ -1,34 +1,49 @@
+import argparse
+
+from catalyst import dl
+
 import torch
-import torch.nn as nn
-from torch import optim
 from torch.utils.data import DataLoader
 
 from mmcv.utils import Config
 
 from liedet.datasets import build_dataset
-from liedet.models.e2e import LieDetector, LieDetectorRunner
+from liedet.models.e2e import LieDetectorRunner
 from liedet.models.registry import build
 
-cfg = "configs/tinaface_r3d.py"
-# cfg = "configs/train/landmarks_audio_transformer.py"
-# cfg = "configs/train/tinaface_r50_audio_transformer.py"
-# cfg = "configs/train/tinaface_audio_transformer.py"
-cfg = Config.fromfile(cfg)
 
-dataset = build_dataset(cfg.dataset)
-dataset = dataset.split(**cfg.dataset.split)
-loaders = dict(
-    train_loader=DataLoader(dataset["train_set"], batch_size=cfg.batch_size, num_workers=0, drop_last=True),
-    valid_loader=DataLoader(dataset["valid_set"], batch_size=cfg.batch_size, num_workers=0),
-)
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--config", "-C", type=str, help="path to config", metavar="CONFIG_PATH", dest="config")
+
+    args, _ = parser.parse_known_args()
+
+    return vars(args)
 
 
-model = build(cfg.model)
-optimizer = optim.Adam(model.parameters())
-criterion = nn.CrossEntropyLoss()
+def main():
+    cfg = parse_args()["config"]
 
-runner = LieDetectorRunner(model=model)
+    cfg = Config.fromfile(cfg)
 
-for batch in loaders["valid_loader"]:
-    with torch.no_grad():
-        batch_prediciton = runner.predict_batch(batch)
+    dataset = build_dataset(cfg.dataset)
+    _, valid_set = dataset.split(**cfg.dataset.split)
+    loader = DataLoader(valid_set, batch_size=cfg.batch_size, num_workers=0, drop_last=True)
+
+    model = build(cfg.model)
+    runner = LieDetectorRunner(model=model)
+
+    runner.evaluate_loader(
+        loader=loader,
+        callbacks=[
+            dl.BatchTransformCallback(
+                input_key="logits", output_key="scores", scope="on_batch_end", transform=torch.sigmoid
+            ),
+            dl.AccuracyCallback(input_key="scores", target_key="labels", num_classes=2),
+        ],
+        verbose=True,
+    )
+
+
+if __name__ == "__main__":
+    main()

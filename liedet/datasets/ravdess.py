@@ -8,7 +8,7 @@ from .builder import datasets
 
 @datasets.register_module(name="RAVDESS")
 class RAVDESSDataset(VideoFolder):
-    def get_label(self, path: str) -> dict:
+    def get_meta(self, path: str) -> dict:
         filename = Path(path).name.split(".")[0]
         tokens = filename.split("-")
 
@@ -16,6 +16,7 @@ class RAVDESSDataset(VideoFolder):
             modality=tokens[0],
             voice=tokens[1],
             emotion=tokens[2],
+            label=tokens[2],
             intensity=tokens[3],
             statement=tokens[4],
             repetition=tokens[5],

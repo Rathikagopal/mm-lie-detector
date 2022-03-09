@@ -81,7 +81,7 @@ def build(
     registry: Registry = registry,  # noqa: WPS442
     input_key: str = "inputs",
     target_key: str = "logits",
-    initialize: bool = True,
+    init: bool = True,
     print_init_info: bool = False,
 ) -> nn.Module:
     if isinstance(cfg, (list, tuple)):
@@ -91,7 +91,7 @@ def build(
     else:
         raise ValueError(f"Config should be dict, list or tuple, but got {type(cfg)}")
 
-    initialize = cfg_dict.pop("initialize", initialize)
+    init = cfg_dict.pop("init", init)
     print_init_info = cfg_dict.pop("print_init_info", print_init_info)
 
     module = recursive_build(
@@ -102,7 +102,7 @@ def build(
         target_key=target_key,
     )
 
-    if initialize:
+    if init:
         logger_names = list(logger_initialized.keys())
         logger_name = logger_names[0] if logger_names else "mmcv"
         logger = get_logger(name=logger_name)

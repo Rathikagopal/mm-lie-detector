@@ -1,52 +1,49 @@
-import torch
-import torchaudio.functional as AF
-import torchvision.transforms as V
+batch_size = 16
 
-batch_size = 20
-
-fps = 30
+# target video fps (real video fps --> target video fps)
+video_fps = 10
+# target audio fps (real audio fps --> target audio fps)
+audio_fps = 24000
+# time window (seconds)
 window_secs = 10
-window = fps * window_secs
-window_div = 3
-
-video_fps = int(window / window_div)
-audio_fps = 22050
-
-vtransform = V.Compose(
-    [
-        V.Lambda(lambda x: x[::window_div]),
-    ]
-)
-atransform = V.Compose(
-    [
-        V.Lambda(lambda x: AF.resample(waveform=x, orig_freq=int(x.size(-1) / window_secs), new_freq=audio_fps)),
-    ]
-)
+# target window size (frames)
+window = video_fps * window_secs
 
 
+# dataset config
 dataset = dict(
     type="Interviews",
-    path="data/interviews",
+    root="data/interviews",
     window=window,
-    vtransform=vtransform,
-    vr_kwargs=dict(
-        atransform=atransform,
-    ),
-    split=dict(
-        valid_size=0.2,
-        by_file=True,
-    ),
+    video_fps=video_fps,
+    # audio_fps=1 to drop audio
+    audio_fps=audio_fps,
+    # train valid split
+    split=dict(valid_size=0.2, balanced_valid_set=True, by_file=True),
 )
 
+# number of features (landmarks + angles + audio features == features_dims)
 features_dims = 1455
+# embed size (features_dims --(Linear)--> embed_dims)
 embed_dims = 512
+# number of target classes (binary == 2)
 num_classes = 2
+
+# model pipeline
 model = dict(
     type="LieDetector",
-    video_model=dict(type="Landmarks", fps=video_fps),
+    # model to extract features from video
+    video_model=dict(
+        type="FaceLandmarks",
+        window=window,
+        init=True,
+        init_cfg=dict(type="PretrainedInit", checkpoint="weights/angles_regressor.pth"),
+    ),
+    # model to extract features from audio
     audio_model=dict(type="AudioFeatures", fps=window_secs, chunk_length=1, sr=audio_fps, normalization=True),
     features_dims=features_dims,
     embed_dims=embed_dims,
+    # time model to extract time-dependent features from time-independent ones
     time_model=dict(
         type="TransformerEncoder",
         encoder_layer=dict(
@@ -57,9 +54,10 @@ model = dict(
             dropout=0.0,
             batch_first=True,
         ),
-        num_layers=1,
+        num_layers=3,
         norm=dict(type="LayerNorm", normalized_shape=embed_dims),
     ),
+    # classifier
     cls_head=dict(
         type="Linear",
         in_features=embed_dims,

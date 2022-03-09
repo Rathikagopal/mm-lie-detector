@@ -1,49 +1,44 @@
-import torch
-import torchaudio.functional as AF
-import torchvision.transforms as V
+batch_size = 16
 
-batch_size = 32
-
-fps = 30
+# target video fps (real video fps --> target video fps)
+video_fps = 10
+# time window (seconds)
 window_secs = 10
-window = fps * window_secs
-window_div = 3
+# target window size (frames)
+window = video_fps * window_secs
 
-video_fps = int(window / window_div)
-
-vtransform = V.Compose(
-    [
-        # fps -> fps // window_div
-        V.Lambda(lambda x: x[::window_div]),
-        # BHWC -> BCHW
-        V.Lambda(lambd=lambda x: x.permute(0, 3, 1, 2)),
-        # H,W -> 240, 320
-        V.Resize(size=(240, 320)),
-        # BCHW -> BHWC
-        V.Lambda(lambd=lambda x: x.permute(0, 2, 3, 1)),
-    ]
-)
-
-
+# dataset config
 dataset = dict(
     type="Interviews",
-    path="data/interviews",
+    root="data/interviews",
     window=window,
-    vtransform=vtransform,
-    split=dict(
-        valid_size=0.2,
-        by_file=True,
-    ),
+    video_fps=video_fps,
+    # audio_fps=1 to drop audio
+    audio_fps=1,
+    # train valid split
+    split=dict(valid_size=0.2, balanced_valid_set=True, by_file=True),
 )
 
+# number of features (landmarks + angles == features_dims)
 features_dims = 1437
+# embed size (features_dims --(Linear)--> embed_dims)
 embed_dims = 512
+# number of target classes (binary == 2)
 num_classes = 2
+
+# model pipeline
 model = dict(
     type="LieDetector",
-    video_model=dict(type="Landmarks", fps=video_fps),
+    # model to extract features from video
+    video_model=dict(
+        type="FaceLandmarks",
+        window=window,
+        init=True,
+        init_cfg=dict(type="PretrainedInit", checkpoint="weights/angles_regressor.pth"),
+    ),
     features_dims=features_dims,
     embed_dims=embed_dims,
+    # time model to extract time-dependent features from time-independent ones
     time_model=dict(
         type="TransformerEncoder",
         encoder_layer=dict(
@@ -57,13 +52,10 @@ model = dict(
         num_layers=3,
         norm=dict(type="LayerNorm", normalized_shape=embed_dims),
     ),
-    cls_head=dict(
-        type="Linear",
-        in_features=embed_dims,
-        out_features=num_classes,
-    ),
+    # classifier
+    cls_head=dict(type="Linear", in_features=embed_dims, out_features=num_classes),
+    init=True,
+    init_cfg=dict(type="PretrainedInit", checkpoint="weights/landmarks_transformer.pth"),
 )
 
-runner = dict(
-    type="LieDetectorRunner",
-)
+runner = dict(type="LieDetectorRunner")

@@ -1,5 +1,18 @@
 data
 !liedet/data
+logs
+
+weights
+.weights
+!weights/.gitkeep
+.configs
+.liedet
+.README.md
+.landmarks
+run.py
+
+assets
+!assets/.gitkeep
 
 .mypy_cache
 

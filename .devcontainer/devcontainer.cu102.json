@@ -1,0 +1,20 @@
+{
+    "name": "mm-lie-detector",
+    "build": {
+        "dockerfile": "Dockerfile.cu102",
+        "context": "../",
+    },
+    "runArgs": [
+        "--gpus=all",
+    ],
+    "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "traBpUkciP.wolf",
+        "TabNine.tabnine-vscode",
+        "KevinRose.vsc-python-indent",
+        "eamodio.gitlens",
+        "DavidAnson.vscode-markdownlint",
+        "njpwerner.autodocstring"
+    ]
+}

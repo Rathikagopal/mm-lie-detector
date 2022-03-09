@@ -1,5 +1,6 @@
-wemake-python-styleguide==0.16.0    
+wemake-python-styleguide==0.16.0
 black==22.1.0
 isort==5.10.1
 mypy==0.910
 colorama==0.4.4
+types-PyYAML==6.0.4
