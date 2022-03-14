@@ -9,6 +9,7 @@ dependencies:
 
   - pip:
     - --find-links https://download.pytorch.org/whl/cpu/torch_stable.html
+    - --find-links https://download.openmmlab.com/mmcv/dist/cpu/torch1.10.0/index.html
     - -r requirements.txt
     - -r requirements-cpu.txt
     - -r dev-requirements.txt
