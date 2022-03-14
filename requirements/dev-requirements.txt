@@ -4,3 +4,5 @@ isort==5.10.1
 mypy==0.910
 colorama==0.4.4
 types-PyYAML==6.0.4
+
+jupyter

@@ -20,13 +20,11 @@
 
 ## 1. Introduction
 
-
 ## 2. Requirements
 
 - `Linux` or `WSL2` (`Windows` and `MacOS` will be supported when `mmcv` will be dropped)
 - [Docker](https://www.docker.com/) or [Conda](conda.io)
 - (Optional) `CUDA 10.2` or `11.3`
-
 
 ## 3. Dependencies
 
@@ -112,22 +110,24 @@
 
 ```bash
     docker build -t <DOCKER IMAGE NAME> -f .devcontainer/Docker.cpu .
-    docker run --rm -it --init -v `pwd`:/workspace/ <DOCKER IMAGE NAME> bash
+    docker run --rm -it -p 7999:7999 --init -v `pwd`:/workspace/ <DOCKER IMAGE NAME> bash
 ```
 
 - or CUDA 10.2
 
 ```bash
     docker build -t <DOCKER IMAGE NAME> -f .devcontainer/Docker.cu102 .
-    docker run --rm -it --init --gpus=all -v `pwd`:/workspace/ <DOCKER IMAGE NAME> bash
+    docker run --rm -it -p 7999:7999 --init --gpus=all -v `pwd`:/workspace/ <DOCKER IMAGE NAME> bash
 ```
 
 - or CUDA 11.3
 
 ```bash
     docker build -t <DOCKER IMAGE NAME> -f .devcontainer/Docker.cu113 .
-    docker run --rm -it --init --gpus=all -v `pwd`:/workspace/ <DOCKER IMAGE NAME> bash
+    docker run --rm -it -p 7999:7999 --init --gpus=all -v `pwd`:/workspace/ <DOCKER IMAGE NAME> bash
 ```
+
+Jupyter notebook is served on 7999 port. It can be accessed via browser via 127.0.0.1:7999 url without password or token.
 
 </details>
 
@@ -197,7 +197,6 @@ requirements/
 weights/
 ...
 ```
-
 
 ### 5.1. Train / Valid
 

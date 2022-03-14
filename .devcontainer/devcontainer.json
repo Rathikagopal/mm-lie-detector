@@ -4,8 +4,11 @@
         "dockerfile": "Dockerfile.cu113",
         "context": "../",
     },
+    "forwardPorts": [
+        7999
+    ],
     "runArgs": [
-        "--gpus=all",
+        "--gpus=all"
     ],
     "extensions": [
         "ms-python.python",

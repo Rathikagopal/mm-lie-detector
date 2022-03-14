@@ -4,6 +4,9 @@
         "dockerfile": "Dockerfile.cpu",
         "context": "../",
     },
+    "forwardPorts": [
+        7999
+    ],
     "extensions": [
         "ms-python.python",
         "ms-python.vscode-pylance",

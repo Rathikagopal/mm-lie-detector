@@ -33,5 +33,6 @@ COPY --chown=user:user requirements /workspace/requirements
 RUN bash -c "conda env create -f /workspace/requirements/environment-cpu.yml"
 RUN rm -rf /workspace/requirements
 RUN bash -c "echo source activate env >> /home/user/.bashrc"
+RUN bash -c "echo jupyter notebook --port 7999 --ip='*' --NotebookApp.token='' --NotebookApp.password='' >> /home/user/.bashrc"
 
 CMD ["/bin/bash"]

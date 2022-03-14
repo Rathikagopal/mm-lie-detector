@@ -4,8 +4,8 @@
         "dockerfile": "Dockerfile.cu102",
         "context": "../",
     },
-    "runArgs": [
-        "--gpus=all",
+    "forwardPorts": [
+        7999
     ],
     "extensions": [
         "ms-python.python",
