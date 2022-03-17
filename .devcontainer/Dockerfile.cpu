@@ -6,7 +6,7 @@ ENV TZ=Europe/Moscow
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone
 
-RUN apt-get update && apt-get install -y ca-certificates wget sudo build-essential git unzip
+RUN apt-get update && apt-get install -y ca-certificates wget sudo build-essential git unzip iproute2 tini
 RUN apt-get install -y libgl1 libsndfile1-dev
 
 RUN mkdir /workspace
@@ -33,6 +33,11 @@ COPY --chown=user:user requirements /workspace/requirements
 RUN bash -c "conda env create -f /workspace/requirements/environment-cpu.yml"
 RUN rm -rf /workspace/requirements
 RUN bash -c "echo source activate env >> /home/user/.bashrc"
-RUN bash -c "echo jupyter notebook --port 7999 --ip='*' --NotebookApp.token='' --NotebookApp.password='' >> /home/user/.bashrc"
+RUN bash -c "echo bash /tmp/jupyter_start.sh >> /home/user/.bashrc"
 
+EXPOSE 7999
+
+COPY --chown=user .devcontainer/jupyter_start.sh /tmp/jupyter_start.sh
+RUN chmod +x /tmp/jupyter_start.sh
+ENTRYPOINT ["tini", "-g", "--"]
 CMD ["/bin/bash"]

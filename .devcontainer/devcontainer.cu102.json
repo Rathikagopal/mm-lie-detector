@@ -7,6 +7,8 @@
     "forwardPorts": [
         7999
     ],
+    "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+    "workspaceFolder": "/workspace",
     "extensions": [
         "ms-python.python",
         "ms-python.vscode-pylance",
