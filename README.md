@@ -37,9 +37,9 @@
 ### 3.2. Python dependencies
 
 - `python`==3.9.x
-- [torch](https://github.com/pytorch/pytorch)==1.10.2
-- [torchvision](https://github.com/pytorch/vision)==0.11.3
-- [torchaudio](https://github.com/pytorch/audio)==0.10.2
+- [torch](https://github.com/pytorch/pytorch)==1.11.0
+- [torchvision](https://github.com/pytorch/vision)==0.12.0
+- [torchaudio](https://github.com/pytorch/audio)==0.11.0
 - [mmcv-full](https://github.com/open-mmlab/mmcv)==1.4.6 (will be dropped in future)
 - [mmdet](https://github.com/open-mmlab/mmdetection)==2.22.0 (will be dropped in future)
 - [mmaction2](https://github.com/open-mmlab/mmaction2)==0.21.0  (will be dropped in future)
