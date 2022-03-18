@@ -1,9 +1,9 @@
-batch_size = 16
+batch_size = 4
 
 # target video fps (real video fps --> target video fps)
 video_fps = 10
 # target audio fps (real audio fps --> target audio fps)
-audio_fps = 24000
+audio_fps = 16000
 # time window (seconds)
 window_secs = 10
 # target window size (frames)
@@ -49,12 +49,12 @@ model = dict(
         encoder_layer=dict(
             type="TransformerEncoderLayer",
             d_model=embed_dims,
-            nhead=8,
+            nhead=16,
             dim_feedforward=embed_dims * 4,
-            dropout=0.0,
+            dropout=0.5,
             batch_first=True,
         ),
-        num_layers=3,
+        num_layers=1,
         norm=dict(type="LayerNorm", normalized_shape=embed_dims),
     ),
     # classifier
@@ -63,6 +63,7 @@ model = dict(
         in_features=embed_dims,
         out_features=num_classes,
     ),
+    init_cfg=dict(type="PretrainedInit", checkpoint="weights/landmarks_audio_transformer.pth"),
 )
 
 runner = dict(
