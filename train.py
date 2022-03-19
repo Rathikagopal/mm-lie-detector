@@ -31,12 +31,12 @@ def main():
     dataset = build_dataset(cfg.dataset)
     train_set, valid_set = dataset.split(**cfg.dataset.split)
     loaders = dict(
-        train_loader=DataLoader(train_set, batch_size=cfg.batch_size, num_workers=0, drop_last=True),
+        train_loader=DataLoader(train_set, batch_size=cfg.batch_size, shuffle=True, num_workers=0, drop_last=True),
         valid_loader=DataLoader(valid_set, batch_size=cfg.batch_size, num_workers=0),
     )
 
     model = build(cfg.model)
-    optimizer = optim.Adam(model.parameters(), lr=1e-3)
+    optimizer = optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-3)
     criterion = nn.CrossEntropyLoss()
 
     runner = LieDetectorRunner()
@@ -53,7 +53,7 @@ def main():
         callbacks=[
             dl.CriterionCallback(input_key="logits", target_key="labels", metric_key="loss"),
             dl.BackwardCallback(metric_key="loss"),
-            dl.OptimizerCallback(metric_key="loss"),
+            dl.OptimizerCallback(metric_key="loss", accumulation_steps=int(16 // cfg.batch_size)),
             dl.AccuracyCallback(input_key="logits", target_key="labels", num_classes=2),
             dl.EarlyStoppingCallback(patience=15, loader_key="valid_loader", metric_key="loss", minimize=True),
             dl.CheckpointCallback(

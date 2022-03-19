@@ -82,7 +82,7 @@ class VideoFolder(Dataset):
         pathname = f"{self.root}/**/*{self.pattern}"
         files = sorted(glob(pathname=pathname, recursive=True))
 
-        return list(files)[:750]
+        return list(files)
 
     def get_metas(self) -> list[dict[str, Any]]:
         return [self.get_meta(path=path) for path in self.files]
