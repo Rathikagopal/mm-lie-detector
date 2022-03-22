@@ -11,7 +11,7 @@ batch_size = 1
 
 # target video fps (real video fps --> target video fps)
 video_fps = 10
-window_secs = 2
+window_secs = 10
 # target window size (number of frames)
 window = video_fps * window_secs
 
@@ -22,7 +22,7 @@ video_transform = V.Normalize(mean=[123.675, 116.28, 103.53], std=[1.0, 1.0, 1.0
 # dataset config
 dataset = dict(
     type="Interviews",
-    root="data/interviews",
+    root="data/converted",
     window=window,
     video_fps=video_fps,
     # audio_fps=1 to drop audio
@@ -68,8 +68,9 @@ model = dict(
     cls_head=dict(
         type="TimeSformerHead",
         in_channels=768,
-        in_channels=num_classes,
+        num_classes=num_classes,
     ),
+    init_cfg=dict(type="PretrainedInit", checkpoint="weights/tinaface_timesformer.pth"),
 )
 
 runner = dict(

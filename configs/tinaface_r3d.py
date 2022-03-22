@@ -6,12 +6,12 @@ from mmcv.utils import Config
 
 tinaface = Config.fromfile("configs/models/tinaface.py")
 
-batch_size = 1
+batch_size = 16
 
 
 # target video fps (real video fps --> target video fps)
 video_fps = 10
-window_secs = 2
+window_secs = 10
 # target window size (number of frames)
 window = video_fps * window_secs
 
@@ -73,6 +73,7 @@ model = dict(
         in_features=512,
         out_features=num_classes,
     ),
+    init_cfg=None,
 )
 
 runner = dict(

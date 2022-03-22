@@ -1,4 +1,4 @@
-batch_size = 4
+batch_size = 16
 
 # target video fps (real video fps --> target video fps)
 video_fps = 10

@@ -95,4 +95,5 @@ cfg = dict(
         return_inds=False,
     ),
     extract_bboxes=dict(type="ExtractBBoxes", single=True),
+    init_cfg=dict(type="PretrainedInit", checkpoint="weights/tinaface_r50_fpn_bn.pth"),
 )

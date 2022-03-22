@@ -91,8 +91,11 @@ class ExtractBBoxes(nn.Module):
         for frame, results in zip(batch_frames, batch_results):
             bboxes = []
             for result in results:
-                bbox = result[0][0][:4].astype(np.int32)
-                extracted = frame[:, bbox[1] : bbox[3], bbox[0] : bbox[2]]
+                try:
+                    bbox = result[0][0][:4].astype(np.int32)
+                    extracted = frame[:, bbox[1] : bbox[3], bbox[0] : bbox[2]]
+                except IndexError:
+                    extracted = frame
                 if self.single:
                     break
                 bboxes.append(extracted)
