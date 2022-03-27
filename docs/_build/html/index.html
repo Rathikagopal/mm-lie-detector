@@ -1,0 +1,622 @@
+<!doctype html>
+<html class="no-js">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Quickstart" href="getting_started/installation.html" />
+
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.03.04"/>
+        <title>Mutimodal Lie Detector documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=935aa2abcc5c1da4283d1dc201fb1f0add16d23a" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="#"><div class="brand">Mutimodal Lie Detector  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="#">
+  
+  
+  <span class="sidebar-brand-text">Mutimodal Lie Detector  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started/installation.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started/configs_hub.html">Configurations Hub</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/data/index.html">liedet.data</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/data/video_reader.html">AVReader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/data/video_reader.html">VideoReader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/data/video_folder.html">VideoFolder</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/datasets/index.html">liedet.datasets</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/interviews.html">Interviews</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/ravdess.html">RAVDESS</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/models/index.html">liedet.models</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/models/backbones/index.html">backbones</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/models/necks/index.html">necks</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/models/necks/inception.html">Inception</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/models/detectors/index.html">detectors</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="mutimodal-lie-detector-s-documentation">
+<h1>Mutimodal Lie Detector’s documentation!<a class="headerlink" href="#mutimodal-lie-detector-s-documentation" title="Permalink to this headline">#</a></h1>
+</section>
+<section id="quickstart">
+<h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">#</a></h1>
+<section id="step-1-installation-docker">
+<h2>Step 1 - Installation: Docker<a class="headerlink" href="#step-1-installation-docker" title="Permalink to this headline">#</a></h2>
+<p>The preffered way is to use <a class="reference external" href="https://www.docker.com/">Docker</a> container.</p>
+<p><a class="reference external" href="https://www.docker.com/">Docker</a> containers are based on:</p>
+<ul class="simple">
+<li><p>CPU: <a class="reference external" href="https://hub.docker.com/_/ubuntu">ubuntu:20.04</a></p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker build -t &lt;DOCKER IMAGE NAME&gt; -f .devcontainer/Docker.cpu .
+docker run --rm -it -p <span class="m">7999</span>:7999 --init -v <span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>:/workspace/&lt;DOCKER IMAGE NAME&gt; bash
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>CUDA 10.2: <a class="reference external" href="https://hub.docker.com/r/nvidia/cuda">nvidia/cuda:10.2-cudnn8-devel-ubuntu18.04</a></p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker build -t &lt;DOCKER IMAGE NAME&gt; -f .devcontainer/Docker.cu102 .
+docker run --rm -it -p <span class="m">7999</span>:7999 --init --gpus<span class="o">=</span>all -v <span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>:/workspace/ &lt;DOCKER IMAGE NAME&gt; bash
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Your host system must have the appropriate nvidia driver and CUDA version.</p>
+</div>
+<ul class="simple">
+<li><p>CUDA 11.3: <a class="reference external" href="https://hub.docker.com/r/nvidia/cuda">nvidia/cuda:11.3.1-cudnn8-devel-ubuntu20.04</a></p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker build -t &lt;DOCKER IMAGE NAME&gt; -f .devcontainer/Docker.cu113 .
+docker run --rm -it -p <span class="m">7999</span>:7999 --init --gpus<span class="o">=</span>all -v <span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>:/workspace/ &lt;DOCKER IMAGE NAME&gt; bash
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Your host system should have the appropriate nvidia driver and CUDA version.</p>
+</div>
+<p>This commands start the container and attach shell to it.
+They also serve Jupyter Notebook on 7999 port
+which can be accessed via browser via <a class="reference external" href="http://127.0.0.1:7999/">127.0.0.1:7999</a> url
+without password or token.</p>
+</section>
+<section id="or-step-1-installation-conda">
+<h2>or Step 1 - Installation: Conda<a class="headerlink" href="#or-step-1-installation-conda" title="Permalink to this headline">#</a></h2>
+<p>Using <a class="reference external" href="https://conda.io/">conda</a> is also a good way as it helps to isolate production environment
+and have consistent dependencies.
+But in out case it still requires some extra libraries
+which should be installed on the host system.</p>
+<p>First of all you need to install <a class="reference external" href="https://github.com/bastibe/python-soundfile">gl1</a> and <a class="reference external" href="https://github.com/bastibe/python-soundfile">soundfile</a> libraries.
+It can be done by a default package manager of your system.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ubuntu</span>
+sudo apt-get install libgl1 libsndfile-dev
+</pre></div>
+</div>
+<p>Then you can bootstrap the dependencies
+depending on the target environment.</p>
+<ul class="simple">
+<li><p>CPU</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda &lt;ENV NAME&gt; create -f requirements/environment-cpu.yml
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>CUDA 10.2</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda &lt;ENV NAME&gt; create -f requirements/environment-cu102.yml
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>CUDA 11.3</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda &lt;ENV NAME&gt; create -f requirements/environment-cu113.yml
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please note that this installation method has only been tested on Ubuntu 20.04. If you are using a other system, you may need to install some additional dependencies.</p>
+</div>
+</section>
+<section id="step-2-download-datasets-and-weights-of-the-pretrained-models">
+<h2>Step 2 - Download datasets and weights of the pretrained models<a class="headerlink" href="#step-2-download-datasets-and-weights-of-the-pretrained-models" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://drive.google.com/drive/folders/1CqCrIbcopweNAIHj6TwipXhNwAxHj49E">Download datasets</a> and place them into <cite>data/</cite> folder.</p></li>
+<li><p><a class="reference external" href="https://drive.google.com/drive/folders/1n3z2ID4qispJ77wDYcgtgxmLexGcnbpY?usp=sharing">Download weights</a>  and place them into <cite>weights/</cite> folder</p></li>
+<li><p>The dirs three should be as follows:</p></li>
+</ul>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>...
+assets/
+configs
+...
+data/
+    |
+    interviews/
+        |
+        184937_143/
+        |   |
+        |   1_0.mp4
+        |   ...
+        2059949_12/
+        ...
+    ...
+...
+liedet/
+requirements/
+weights/
+...
+</pre></div>
+</div>
+</section>
+<section id="step-3-train-validate-inference-models">
+<h2>Step 3 - Train / Validate / Inference models<a class="headerlink" href="#step-3-train-validate-inference-models" title="Permalink to this headline">#</a></h2>
+<p>For training/validation, you can use the appropriate scripts:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>python {train|valid}.py {--config|-C} &lt;PATH TO CONFIG&gt;
+</pre></div>
+</div>
+<p>and for inference:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>python infer.py {--config|-C} &lt;PATH TO CONFIG&gt; {--video|-V} &lt;PATH TO VIDEO&gt;
+</pre></div>
+</div>
+<p>For example, for training Transformer Encoder on face landmarks and angles,
+you can use the following command:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>python train.py -C configs/landmarks_transformer.py
+</pre></div>
+</div>
+<p>similarly, for its validation:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>python valid.py -C configs/landmarks_transformer.py
+</pre></div>
+</div>
+<p>and similarly, for generating predictions for a custom video:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>python infer.py -C configs/landmarks_transformer.py -V assets/example.mp4
+</pre></div>
+</div>
+</section>
+<section id="step-4-customization">
+<h2>Step 4 - Customization<a class="headerlink" href="#step-4-customization" title="Permalink to this headline">#</a></h2>
+<section id="custom-dataset">
+<h3>4.1 Custom dataset<a class="headerlink" href="#custom-dataset" title="Permalink to this headline">#</a></h3>
+<p>If a custom dataset has the following structure,
+you can use <a class="reference external" href="liedet/data/video_folder.py">VideoFolder</a> class.
+It extracts target class name (<cite>int</cite>) from a file name.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>data/custom_dataset/
+    |
+    any_folder_name1/
+    |   |
+    |   any_file_name1_&lt;TARGET CLASS&gt;.mp4
+    |   |
+    |   any_file_name2_&lt;TARGET CLASS&gt;.mp4
+    |   ...
+    any_folder_name1/
+    ...
+...
+</pre></div>
+</div>
+<p>If a custom dataset has an other structure,
+you can inherit <a class="reference external" href="liedet/data/video_folder.py">VideoFolder</a> class and overwrite <cite>get_meta</cite> method.</p>
+<p>For example, <a class="reference external" href="https://paperswithcode.com/dataset/ravdess">RAVDESS</a> dataset uses the following filename structure,
+where <cite>emotion</cite> is a label:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&lt;MODALITY&gt;-&lt;VOICE&gt;-&lt;EMOTION&gt;-&lt;INTENSITY&gt;-&lt;STATEMEN&gt;-&lt;REPETITION&gt;-&lt;ACTOR&gt;.mp4
+</pre></div>
+</div>
+<p>In this case, you can overwrite the <cite>get_meta</cite> as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span> <span class="nn">liedet.data</span> <span class="kn">import</span> <span class="n">VideoFolder</span>
+
+<span class="k">class</span> <span class="nc">CustomDataset</span><span class="p">(</span><span class="n">VideoFolder</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">tokens</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"-"</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">modality</span><span class="o">=</span><span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">voice</span><span class="o">=</span><span class="n">tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">emotion</span><span class="o">=</span><span class="n">tokens</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">label</span><span class="o">=</span><span class="n">tokens</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">intensity</span><span class="o">=</span><span class="n">tokens</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+            <span class="n">statement</span><span class="o">=</span><span class="n">tokens</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+            <span class="n">repetition</span><span class="o">=</span><span class="n">tokens</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+            <span class="n">actor</span><span class="o">=</span><span class="n">tokens</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+<p>It stores tags of each file in <cite>self.metas</cite> attribute
+and uses <cite>self.label_key</cite> to extract target class label from metadata.
+By default <cite>self.label_key == “label”</cite>,
+so your method should return a dict object which contains key <cite>label</cite>,
+or you can pass <cite>label_key</cite> kwarg to a <cite>CustomDataset</cite> constructor.</p>
+<p>If you would like to use this class in the config files
+when you need to register it in registry by decorator as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># liedet/datasets/custom_dataset.py'</span>
+
+<span class="kn">from</span> <span class="nn">liedet.data</span> <span class="kn">import</span> <span class="n">VideoFolder</span>
+<span class="kn">from</span> <span class="nn">liedet.datasets</span> <span class="kn">import</span> <span class="n">datasets</span>
+
+<span class="nd">@datasets</span><span class="o">.</span><span class="n">register_module</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">CustomDataset</span><span class="p">(</span><span class="n">VideoFolder</span><span class="p">):</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p>and import it in <cite>liedet/datasets/__init__.py</cite> file:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+<span class="kn">from</span> <span class="nn">liedet.datasets.custom_dataset</span> <span class="kn">import</span> <span class="n">CustomDataset</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>After that you can use your <cite>CustomDataset</cite> in config files as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># configs/custom_config.py</span>
+
+<span class="o">...</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+    <span class="nb">type</span><span class="o">=</span><span class="s2">"CustomDataset"</span><span class="p">,</span>
+    <span class="n">root</span><span class="o">=</span><span class="s2">"&lt;PATH TO CUSTOM DATASET&gt;"</span><span class="p">,</span>
+    <span class="o">...</span>
+<span class="p">)</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>Another way is to import a <cite>CustomDataset</cite> directly to a config file:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># configs/custom_config.py</span>
+
+<span class="o">...</span>
+<span class="kn">from</span> <span class="nn">path.to.custom.module</span> <span class="kn">import</span> <span class="n">CustomDataset</span>
+<span class="o">...</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+    <span class="nb">type</span><span class="o">=</span><span class="n">CustomDataset</span><span class="p">,</span>
+    <span class="n">root</span><span class="o">=</span><span class="s2">"&lt;PATH TO CUSTOM DATASET&gt;"</span><span class="p">,</span>
+    <span class="o">...</span>
+<span class="p">)</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+</section>
+<section id="custom-model">
+<h3>4.2 Custom model<a class="headerlink" href="#custom-model" title="Permalink to this headline">#</a></h3>
+<p>Similarly to custom dataset, you can implement and use your own model.
+The model should be the submodule of <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Module.html">torch.nn.Model</a> class.</p>
+</section>
+<section id="modifying-training-validation-inference-parameters">
+<h3>4.3 Modifying training/validation/inference parameters<a class="headerlink" href="#modifying-training-validation-inference-parameters" title="Permalink to this headline">#</a></h3>
+<p>All pre-defined configurations are stored in separate files
+in <a class="reference external" href="configs/">configs/</a> directory.
+For modifying parameters like batch_size, dataset,
+pre-processing pipeline, model configuration and its parts,
+learning rate, metrics, callbacks, critetion and other and other,
+you can just open and edit existing configuration file or copy it and edit.</p>
+<p>You can use any libraries and their components
+as long as they are compatible with pytorch.
+For example, <a class="reference external" href="https://github.com/pytorch/vision">torchvision</a>, <a class="reference external" href="https://github.com/pytorch/audio">torchaudio</a>, <a class="reference external" href="https://github.com/pytorch/text">torchtext</a>,
+<a class="reference external" href="https://github.com/rwightman/pytorch-image-models">timm</a>, <a class="reference external" href="https://github.com/open-mmlab">open-mmlab ecosystem</a>, <a class="reference external" href="https://github.com/BloodAxe/pytorch-toolbelt">pytorch-toolbelt</a>, and others.</p>
+<p>See configuration examples in <a class="reference external" href="configs/">configs/</a> folder for more information.</p>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started/installation.html">Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/installation.html#step-1-installation-docker">Step 1 - Installation: Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/installation.html#or-step-1-installation-conda">or Step 1 - Installation: Conda</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/installation.html#step-2-download-datasets-and-weights-of-the-pretrained-models">Step 2 - Download datasets and weights of the pretrained models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/installation.html#step-3-train-validate-inference-models">Step 3 - Train / Validate / Inference models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/installation.html#step-4-customization">Step 4 - Customization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started/configs_hub.html">Configurations Hub</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/configs_hub.html#visual-only">Visual Only</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/configs_hub.html#audial-only">Audial Only</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/configs_hub.html#audio-visual">Audio-Visual</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/data/index.html">liedet.data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/data/index.html#avreader">AVReader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/data/index.html#videoreader">VideoReader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/data/index.html#videofolder">VideoFolder</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/datasets/index.html">liedet.datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/index.html#interviews">Interviews</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/index.html#ravdess">RAVDESS</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/models/index.html">liedet.models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/models/backbones/index.html">backbones</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/models/backbones/index.html#dividing-images-to-sequence-of-pathches">Dividing images to sequence of pathches</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/models/backbones/index.html#patchembed">PatchEmbed</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/models/backbones/index.html#transformer">Transformer</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/models/backbones/index.html#transformerencoder">TransformerEncoder</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/models/backbones/index.html#attention-layers">Attention Layers</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/models/backbones/index.html#dividedtemporalattentionwithnorm">DividedTemporalAttentionWithNorm</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/models/backbones/index.html#dividedspatialattentionwithnorm">DividedSpatialAttentionWithNorm</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/models/backbones/index.html#feed-forward">Feed-Forward</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/models/backbones/index.html#ffnwithnorm">FFNWithNorm</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/models/necks/index.html">necks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/models/necks/index.html#inception">Inception</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/models/detectors/index.html">detectors</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/models/detectors/index.html#audial-detectors">Audial Detectors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/models/detectors/index.html#visual-detectors">Visual Detectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/models/detectors/index.html#landmarks-detector">Landmarks Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/models/detectors/index.html#face-detector">Face Detector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="getting_started/installation.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Quickstart</div>
+              </div>
+              <svg><use href="#svg-arrow-right"></use></svg>
+            </a>
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, Michael Sinko
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Mutimodal Lie Detector’s documentation!</a></li>
+<li><a class="reference internal" href="#quickstart">Quickstart</a><ul>
+<li><a class="reference internal" href="#step-1-installation-docker">Step 1 - Installation: Docker</a></li>
+<li><a class="reference internal" href="#or-step-1-installation-conda">or Step 1 - Installation: Conda</a></li>
+<li><a class="reference internal" href="#step-2-download-datasets-and-weights-of-the-pretrained-models">Step 2 - Download datasets and weights of the pretrained models</a></li>
+<li><a class="reference internal" href="#step-3-train-validate-inference-models">Step 3 - Train / Validate / Inference models</a></li>
+<li><a class="reference internal" href="#step-4-customization">Step 4 - Customization</a><ul>
+<li><a class="reference internal" href="#custom-dataset">4.1 Custom dataset</a></li>
+<li><a class="reference internal" href="#custom-model">4.2 Custom model</a></li>
+<li><a class="reference internal" href="#modifying-training-validation-inference-parameters">4.3 Modifying training/validation/inference parameters</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/scripts/furo.js"></script>
+    </body>
+</html>
