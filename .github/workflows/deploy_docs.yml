@@ -1,0 +1,37 @@
+name: docs
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+
+  build-docs:
+    name: build-docs
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        os: [ubuntu-20.04]
+        python-version: [3.9]
+        requires: ['latest']
+    steps:
+      - uses: actions/checkout@v2
+      - name: copy
+        env:
+          SRC_FOLDER_PATH: 'docs/_build/html'
+          TARGET_BRANCH: 'gh-pages'
+        run: |
+          files=$(find $SRC_FOLDER_PATH)
+          
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          
+          git fetch
+          git checkout $TARGET_BRANCH
+          git checkout ${GITHUB_REF##*/} -- $files
+          git add -A
+          git diff-index --quiet HEAD ||  git commit -am "docs: update docs"
+          git push origin $TARGET_BRANCH
