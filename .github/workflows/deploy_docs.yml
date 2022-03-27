@@ -18,20 +18,8 @@ jobs:
         python-version: [3.9]
         requires: ['latest']
     steps:
-      - uses: actions/checkout@v2
-      - name: copy
-        env:
-          SRC_FOLDER_PATH: 'docs/_build/html'
-          TARGET_BRANCH: 'gh-pages'
-        run: |
-          files=$(find $SRC_FOLDER_PATH)
-          
-          git config --global user.name 'GitHub Action'
-          git config --global user.email 'action@github.com'
-          
-          git fetch
-          git checkout $TARGET_BRANCH
-          git checkout ${GITHUB_REF##*/} -- $files
-          git add -A
-          git diff-index --quiet HEAD ||  git commit -am "docs: update docs"
-          git push origin $TARGET_BRANCH
+      - name: Deploy docs on gh-pages
+      - uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: 'docs/_build/html'
