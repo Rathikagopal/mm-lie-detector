@@ -3,13 +3,15 @@ max-line-length = 120
 
 max-complexity = 17
 
-docstring-style = numpy
-strictness = long
+multiline-quotes = double
+docstring-quotes = double
+convention = google
+docstring_style = google
+strictness = short
 
 inline-quotes = "
 
-ignore = E501,E203,W503
-extend-ignore = D
+ignore = E501,E203,W503,D100,D104,D107,D200,D204,D205,D212,D214,D301,D400,D401,D402,D412,D413,D415,DAR003,DAR103,DAR203,RST201,RST203,RST210,RST213,RST301,RST304,E203,E731,N812,P101,W503,W504,W605,WPS111,WPS347,WPS230,WPS230,WPS211
 per-file-ignores =
     __init__.py:F401
 exclude =

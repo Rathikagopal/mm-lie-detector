@@ -170,16 +170,29 @@
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../../api/models/index.html">liedet.models</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/models/backbones/index.html">backbones</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/models/backbones/index.html">backbones</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/backbones/ast.html">ast</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/backbones/timesformer.html">timesformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/backbones/mm_transformer.html">mm_transformer</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/models/necks/index.html">necks</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/necks/inception.html">Inception</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/models/heads/index.html">heads</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/heads/ast_head.html">ast_head</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/heads/timesformer_head.html">timesformer_head</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/heads/iou_aware.html">iou_aware</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/models/detectors/index.html">detectors</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/models/necks/index.html">necks</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/necks/inception.html">inception</a></li>
 </ul>
 </li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/models/detectors/index.html">detectors</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/detectors/audio.html">audio</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/detectors/landmarks.html">landmarks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/detectors/tinaface.html">tinaface</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/models/e2e.html">e2e</a></li>
 </ul>
 </li>
 </ul>
@@ -221,6 +234,7 @@
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
 <span class="kn">import</span> <span class="nn">torchaudio</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">Tensor</span>
 
 <span class="kn">from</span> <span class="nn">...registry</span> <span class="kn">import</span> <span class="n">registry</span>
 <span class="kn">from</span> <span class="nn">.main</span> <span class="kn">import</span> <span class="n">main</span>
@@ -228,7 +242,20 @@
 
 <div class="viewcode-block" id="AudioFeatures"><a class="viewcode-back" href="../../../../api/models/detectors/index.html#liedet.models.detectors.audio.AudioFeatures">[docs]</a><span class="nd">@registry</span><span class="o">.</span><span class="n">register_module</span><span class="p">()</span>
 <span class="k">class</span> <span class="nc">AudioFeatures</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">"""Audio Features extractor."""</span>
+
 <div class="viewcode-block" id="AudioFeatures.__init__"><a class="viewcode-back" href="../../../../api/models/detectors/index.html#liedet.models.detectors.audio.AudioFeatures.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span> <span class="n">chunk_length</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sr</span><span class="o">=</span><span class="mi">48000</span><span class="p">,</span> <span class="n">normalization</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Args:</span>
+<span class="sd">            fps (int, optional): number of video frames per second.</span>
+<span class="sd">                Defaults to 30.</span>
+<span class="sd">            chunk_length (int, optional): number of second per chunk.</span>
+<span class="sd">                Defaults to 1.</span>
+<span class="sd">            sr (int, optional): audio sample rate.</span>
+<span class="sd">                Defaults to 48000.</span>
+<span class="sd">            normalization (bool, optional): boolean flag to normalize audio features.</span>
+<span class="sd">                Defaults to True.</span>
+<span class="sd">        """</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">video_fps</span> <span class="o">=</span> <span class="n">fps</span>
@@ -237,7 +264,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">normalization</span> <span class="o">=</span> <span class="n">normalization</span></div>
 
 <div class="viewcode-block" id="AudioFeatures.forward"><a class="viewcode-back" href="../../../../api/models/detectors/index.html#liedet.models.detectors.audio.AudioFeatures.forward">[docs]</a>    <span class="nd">@torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">()</span>
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="sd">"""Forwards audio frames to features extractor.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x (Tensor): batch of input audio frames.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tensor: batch of extracted audio features.</span>
+<span class="sd">        """</span>
         <span class="n">batch_size</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">device</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">device</span>
 

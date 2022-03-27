@@ -1,4 +1,3 @@
-# Copyright (c) OpenMMLab. All rights reserved.
 from __future__ import annotations
 
 from typing import Any
@@ -7,7 +6,7 @@ import numpy as np
 
 import torch
 import torch.nn as nn
-from torchaudio.transforms import MelSpectrogram
+from torch import Tensor
 
 from mmcv import ConfigDict
 from mmcv.cnn import build_norm_layer
@@ -21,12 +20,39 @@ from .timesformer import PatchEmbed as PE
 
 
 class PatchEmbed(PE):
-    def forward(self, x) -> nn.Module:
+    """Patch Embedding for batch of single images.
+
+    | ((B, C, H, W))--
+    |    --[Conv2d]--
+    |    --[Flatten]--
+    | -->((B, F))
+    |
+    | where F - embedding dim
+
+    """
+
+    def forward(self, x: Tensor) -> Tensor:
+        """Projects batch of images to batch of embeddings
+
+        Args:
+            x (Tensor): batch of input images
+
+        Returns:
+            Tensor: batch of embeddings
+        """
         return self.projection(x).flatten(2).transpose(1, 2)
 
 
 @registry.register_module()
 class AST(nn.Module):
+    """Audio Spectrogram Transformer.
+
+    See also: `AST: Audio Spectrogram Transformer`_
+
+    .. _`AST: Audio Spectrogram Transformer`: https://arxiv.org/pdf/2104.01778.pdf
+
+    """
+
     def __init__(
         self,
         img_size: int | tuple[int, int],
@@ -37,11 +63,35 @@ class AST(nn.Module):
         num_transformer_layers: int = 12,
         in_channels: int = 1,
         dropout_ratio: float = 0.0,
-        transformer_layers=None,
+        transformer_layers: dict | list | None = None,
         pretrained: str | None = None,
         norm_cfg: dict[str, Any] = dict(type="LN", eps=1e-6),
         **kwargs,
     ) -> None:
+        """
+        Args:
+            img_size (int | tuple[int, int]): size of input image (spectrogram).
+            patch_size (int | tuple[int, int]): size of patch.
+            stride (int | tuple[int, int] | None, optional): stride size between patches.
+                Defaults to 10.
+            embed_dims (int, optional): number of embedding features.
+                Defaults to 768.
+            num_heads (int, optional): number of parallel computed attentions.
+                Defaults to 12.
+            num_transformer_layers (int, optional): depth of transformer encoder.
+                Defaults to 12.
+            in_channels (int, optional): number of channels of input image.
+                Defaults to 1.
+            dropout_ratio (float, optional): probability of dropout after embedding.
+                Defaults to 0.0.
+            transformer_layers (dict | list | None, optional): single dictionary or sequence of dictionaries
+                with configs of tranformer layers. Layers is applied with respect to order in list.
+                Defaults to None.
+            pretrained (str | None, optional): path to a local file or url link to pretrained weights.
+                Defaults to None.
+            norm_cfg (dict[str, Any], optional): dictionary with parameters for weights initializations.
+                Defaults to dict(type="LN", eps=1e-6).
+        """
         super().__init__()
 
         assert transformer_layers is None or isinstance(transformer_layers, (dict, list))
@@ -107,8 +157,7 @@ class AST(nn.Module):
         self.transformer_layers = build_transformer_layer_sequence(transformer_layers)
 
     def init_weights(self, pretrained=None):
-        """Initiate the parameters either from existing checkpoint or from
-        scratch."""
+        """Initiate the parameters either from existing checkpoint or from scratch."""
         trunc_normal_(self.pos_embed, std=0.02)
         trunc_normal_(self.cls_token, std=0.02)
 
@@ -124,7 +173,24 @@ class AST(nn.Module):
 
             load_state_dict(self, state_dict, strict=False, logger=logger)
 
-    def forward(self, x):
+    def forward(self, x: Tensor) -> Tensor:
+        """Forwards input tensor to AST.
+
+        | (Input)--
+        |    --[PatchEmbed]--
+        |    --[Add Class Token]--
+        |    --[Add Position Embedding]--
+        |    --[Dropout]--
+        |    --[Attentions]--
+        |    --[Normalization]--
+        | -->(Output)
+
+        Args:
+            x (Tensor): input batch of images (spectrograms).
+
+        Returns:
+            Tensor: output batch
+        """
         # x [batch_size, num_patches, embed_dims]
         x = self.patch_embed(x)
 

@@ -1,8 +1,10 @@
-from typing import Optional
+from __future__ import annotations
+
+from typing import Any
 
 import torch
 import torch.nn.functional as F
-from torch import nn
+from torch import Tensor, nn
 
 from mmcv.cnn import ConvModule, xavier_init
 
@@ -11,16 +13,41 @@ from ..registry import registry
 
 @registry.register_module()
 class Inception(nn.Module):
+    """Inception module
+
+    This architecture is used on the coarsest grids to promote high dimensional representations.
+
+    See also: `Inception Module`_, `Rethinking the Inception Architecture for Computer Vision`_.
+
+    .. _`Inception Module`: https://paperswithcode.com/method/inception-module
+    .. _`Rethinking the Inception Architecture for Computer Vision`: https://arxiv.org/pdf/1512.00567v3.pdf
+
+    """
+
     def __init__(
         self,
         in_channels: int,
         num_levels: int,
-        conv_cfg: Optional[dict] = None,
-        norm_cfg: Optional[dict] = None,
-        dcn_cfg: Optional[dict] = None,
+        conv_cfg: dict[str, Any] | None = None,
+        norm_cfg: dict[str, Any] | None = None,
+        dcn_cfg: dict[str, Any] | None = None,
         share: bool = False,
         **kwargs,
     ):
+        """
+        Args:
+            in_channels (int): number of input channels.
+            num_levels (int): number of feature levels.
+            conv_cfg (dict[str, Any] | None, optional): dictionary with parameters of convolutional layers.
+                Defaults to None.
+            norm_cfg (dict[str, Any] | None, optional): dictionary with parameters of normalization layer.
+                Defaults to None.
+            dcn_cfg (dict[str, Any] | None, optional): dictionary with parameters for deformable
+                convolutional layers.
+                Defaults to None.
+            share (bool, optional): boolean flag to share convolutions over levels of features.
+                Defaults to False.
+        """
         super().__init__()
 
         self.in_channels = in_channels
@@ -85,12 +112,21 @@ class Inception(nn.Module):
                 act_cfg=act_cfg,
             )
 
-    def init_weights(self):
+    def init_weights(self) -> None:
+        """Weights initialization."""
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
                 xavier_init(m, distribution="uniform")
 
-    def forward(self, input):
+    def forward(self, input: tuple[Tensor, ...]) -> tuple[Tensor, ...]:
+        """Forwards features of each feature levels to convolutional blocks.
+
+        Args:
+            input (tuple[Tensor, ...]): input tuple of level features.
+
+        Returns:
+            tuple[Tensor, ...]: output tuple of level features after inception.
+        """
         outs = []
         for i in range(self.num_levels):
             x = input[i]

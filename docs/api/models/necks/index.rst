@@ -1,10 +1,8 @@
 Bottlenecks
-======
+============
 
 .. toctree::
-    :hidden:
-
-    Inception <inception>
+    inception <inception>
 
 
 Inception

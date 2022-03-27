@@ -4,9 +4,7 @@ from einops import rearrange
 from mediapipe.python.solutions import face_mesh
 
 import torch
-import torch.nn as nn
 from torch import Tensor
-from torchvision import io
 
 from liedet.models.base_module import BaseModule
 
@@ -16,6 +14,17 @@ from .rotate_regressor import Regressor
 
 @registry.register_module()
 class FaceLandmarks(BaseModule):
+    """Face Landmarks extractor.
+
+    This models wraps Mediapipe Face Mesh for landmarks extraction
+    and computes rotation angles to normalize face rotation.
+
+    See also: `MediaPipe Face Mesh`_.
+
+    .. _`MediaPipe Face Mesh`: https://google.github.io/mediapipe/solutions/face_mesh.html
+
+    """
+
     def __init__(
         self,
         window: int | None = None,
@@ -27,6 +36,27 @@ class FaceLandmarks(BaseModule):
         init: bool = False,
         **kwargs,
     ):
+        """
+        Args:
+            window (int | None, optional): number of frames per window.
+                If None when static_image_mode is True by default,
+                otherwise face mesh is tried to track faces over window frames.
+                Defaults to None.
+            static_image_mode (bool, optional): boolean flag to track face over frames.
+                Defaults to True.
+            min_detection_confidence (float, optional): minimun confidence threshold to select face.
+                Defaults to 0.5.
+            min_tracking_confidence (float, optional): minimun confidence threshold to track face.
+                Defaults to 0.5.
+            normalize (bool, optional): boolean flag to normalize landmarks.
+                Defaults to True.
+            rotate (bool, optional): boolean flag to normalize landmarks rotation
+                and extract rotation angles.
+                Defaults to True.
+            init (bool, optional): boolean flag to initialize weights
+                or load pretrained ones from config.
+                Defaults to False.
+        """
         super().__init__(**kwargs)
 
         self.window = window
@@ -45,6 +75,14 @@ class FaceLandmarks(BaseModule):
 
     @torch.no_grad()
     def forward(self, x: Tensor) -> Tensor:
+        """Forwards input images to Mediapipe Face Mesh.
+
+        Args:
+            x (Tensor): batch or input images.
+
+        Returns:
+            Tensor: batch of landmarks [and rotation angles].
+        """
         device = x.device
 
         self.regressor.to(device)
@@ -98,6 +136,14 @@ class FaceLandmarks(BaseModule):
         return h
 
     def normalize(self, x: Tensor) -> Tensor:
+        """Min/Max normalization of landmarks.
+
+        Args:
+            x (Tensor): batch of input landmarks.
+
+        Returns:
+            Tensor: batch of normalized landmarks.
+        """
         min_value, max_value = x.min(dim=-1, keepdim=True).values, x.max(dim=-1, keepdim=True).values
 
         if min_value.allclose(max_value):
@@ -106,6 +152,16 @@ class FaceLandmarks(BaseModule):
         return (x - min_value).abs() / (max_value - min_value).abs()
 
     def _rotate(self, x: Tensor, axis: Tensor, angles: Tensor) -> Tensor:
+        """Rotates landmarks over single axis.
+
+        Args:
+            x (Tensor): batch of input landmarks.
+            axis (Tensor): basis of target axis.
+            angles (Tensor): batch of rotation angles.
+
+        Returns:
+            Tensor: batch of rotated landmarks.
+        """
         sin_angles = torch.sin(angles)
         cos_angles = torch.cos(angles)
 
@@ -116,6 +172,14 @@ class FaceLandmarks(BaseModule):
         return cos_angles * x + sin_angles * cross_products + (1 - cos_angles) * dot_products * axis
 
     def rotate(self, x: Tensor) -> Tensor:
+        """Regresses rotations angles and normalizes landmarks rotation angles.
+
+        Args:
+            x (Tensor): batch of input landmarks.
+
+        Returns:
+            Tensor: batch of normalized landmarks and rotation angles.
+        """
         h: Tensor = x - x.mean(dim=1, keepdim=True)
         h = h / torch.norm(h, dim=-1, keepdim=True)
 

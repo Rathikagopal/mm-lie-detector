@@ -171,16 +171,29 @@
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="api/models/index.html">liedet.models</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="api/models/backbones/index.html">backbones</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/models/backbones/index.html">backbones</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/models/backbones/ast.html">ast</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/models/backbones/timesformer.html">timesformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/models/backbones/mm_transformer.html">mm_transformer</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="api/models/necks/index.html">necks</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="api/models/necks/inception.html">Inception</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/models/heads/index.html">heads</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/models/heads/ast_head.html">ast_head</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/models/heads/timesformer_head.html">timesformer_head</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/models/heads/iou_aware.html">iou_aware</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="api/models/detectors/index.html">detectors</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/models/necks/index.html">necks</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/models/necks/inception.html">inception</a></li>
 </ul>
 </li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/models/detectors/index.html">detectors</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/models/detectors/audio.html">audio</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/models/detectors/landmarks.html">landmarks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/models/detectors/tinaface.html">tinaface</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/models/e2e.html">e2e</a></li>
 </ul>
 </li>
 </ul>
@@ -501,6 +514,26 @@ For example, <a class="reference external" href="https://github.com/pytorch/visi
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api/models/index.html">liedet.models</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="api/models/backbones/index.html">backbones</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/models/backbones/ast.html">ast</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/models/backbones/timesformer.html">timesformer</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/models/backbones/timesformer.html#patchembed">PatchEmbed</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/models/backbones/timesformer.html#transformer">Transformer</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="api/models/backbones/timesformer.html#transformerencoder">TransformerEncoder</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="api/models/backbones/timesformer.html#attention-layers">Attention Layers</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="api/models/backbones/timesformer.html#dividedtemporalattentionwithnorm">DividedTemporalAttentionWithNorm</a></li>
+<li class="toctree-l5"><a class="reference internal" href="api/models/backbones/timesformer.html#dividedspatialattentionwithnorm">DividedSpatialAttentionWithNorm</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="api/models/backbones/timesformer.html#feed-forward">Feed-Forward</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="api/models/backbones/timesformer.html#ffnwithnorm">FFNWithNorm</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="api/models/backbones/timesformer.html#id4">TimeSformer</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/models/backbones/mm_transformer.html">mm_transformer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/models/backbones/index.html#dividing-images-to-sequence-of-pathches">Dividing images to sequence of pathches</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="api/models/backbones/index.html#patchembed">PatchEmbed</a></li>
 </ul>
@@ -518,21 +551,33 @@ For example, <a class="reference external" href="https://github.com/pytorch/visi
 <li class="toctree-l4"><a class="reference internal" href="api/models/backbones/index.html#ffnwithnorm">FFNWithNorm</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="api/models/backbones/index.html#multimodal-transformer">Multimodal Transformer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/models/heads/index.html">heads</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/models/heads/ast_head.html">ast_head</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/models/heads/timesformer_head.html">timesformer_head</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/models/heads/iou_aware.html">iou_aware</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="api/models/necks/index.html">necks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/models/necks/inception.html">inception</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/models/necks/index.html#inception">Inception</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="api/models/detectors/index.html">detectors</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/models/detectors/audio.html">audio</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/models/detectors/landmarks.html">landmarks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/models/detectors/tinaface.html">tinaface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/models/detectors/index.html#audial-detectors">Audial Detectors</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/models/detectors/index.html#visual-detectors">Visual Detectors</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="api/models/detectors/index.html#landmarks-detector">Landmarks Detector</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/models/detectors/index.html#face-detector">Face Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/models/detectors/index.html#landmarks-detectors">Landmarks Detectors</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/models/detectors/index.html#face-detectors">Face Detectors</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="api/models/e2e.html">e2e</a></li>
 </ul>
 </li>
 </ul>

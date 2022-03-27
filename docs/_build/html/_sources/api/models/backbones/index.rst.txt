@@ -2,8 +2,9 @@ Backbones
 ==========
 
 .. toctree::
-    :hidden:
-
+    ast <ast>
+    timesformer <timesformer>
+    mm_transformer <mm_transformer>
 
 
 Dividing images to sequence of pathches
@@ -14,17 +15,21 @@ PatchEmbed
 
 Extraction of patches from series of images (video)
 
+
 .. autoclass:: liedet.models.backbones.timesformer.PatchEmbed
     :members:
     :special-members:
     :show-inheritance:
 
+
 Extraction of patches from audio spectrogram
+
 
 .. autoclass:: liedet.models.backbones.ast.PatchEmbed
     :members:
     :special-members:
     :show-inheritance:
+
 
 Transformer
 ------------
@@ -50,6 +55,7 @@ DividedTemporalAttentionWithNorm
     :show-inheritance:
     :special-members:
 
+
 DividedSpatialAttentionWithNorm
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -58,6 +64,7 @@ DividedSpatialAttentionWithNorm
     :show-inheritance:
     :special-members:
 
+
 Feed-Forward
 -------------
 
@@ -65,6 +72,15 @@ FFNWithNorm
 ~~~~~~~~~~~~
 
 .. autoclass:: liedet.models.common.transformer.FFNWithNorm
+    :members:
+    :show-inheritance:
+    :special-members:
+
+
+Multimodal Transformer
+-----------------------
+
+.. autoclass:: liedet.models.backbones.mm_transformer.AttentionBottleneckTransformer
     :members:
     :show-inheritance:
     :special-members:

@@ -1,21 +1,37 @@
 from __future__ import annotations
 
-from typing import Any
-
 import decord
 from einops import rearrange
 
 import torch
 from torch import Tensor
 from torch.utils.data import Dataset
-from torchaudio import transforms as A
 from torchaudio.functional import resample
 from torchvision import io
 from torchvision import transforms as V
 
 
 class AVReader(decord.AVReader):
-    def __getitem__(self, idx: int | slice | Tensor) -> tuple[Any, Any]:
+    """Wrapper around decord.AVReader
+
+    This class expands allowed types of indexing and allows to pass tensor as index.
+
+    See also `decord.AVReader`_.
+
+    .. _`decord.AVReader`: https://github.com/dmlc/decord/blob/master/python/decord/av_reader.py
+    """
+
+    def __getitem__(self, idx: int | slice | Tensor) -> tuple[tuple[Tensor], Tensor]:
+        """Gets video and audio frames with passed index(es).
+
+        Args:
+            idx (int | slice | Tensor): index(es) of video frames.
+
+        Returns:
+            tuple[tuple[Tensor], Tensor]: tuple of audio and video frames.
+            Audio frames are returned as a tuple of Tensors because of different sizes.
+            Video frames are returned as a Tensor.
+        """
         assert self.__video_reader is not None and self.__audio_reader is not None
 
         if isinstance(idx, (slice, int)):
@@ -25,6 +41,54 @@ class AVReader(decord.AVReader):
 
 
 class VideoReader(Dataset):
+    """Base Video Reader Dataset
+
+    The class implements base logic to extract video and audio frames (or windows of them) from video file.
+
+    Example:
+
+    .. code-block:: python
+
+        from torchvision import transforms as V
+        from torchaudio import transforms as A
+
+        from liedet.data import VideoReader
+
+        video_transforms = V.Compose([
+            V.Resize(224),
+            V.Normalize(
+                mean=[0.4914, 0.4822, 0.4465],
+                std=[0.2023, 0.1994, 0.2010],
+            ),
+        ])
+        audio_transforms = V.Compose([
+            A.Resample(orig_freq=48000, new_freq=16000),
+            A.MelSpectrogram(sample_rate=16000, normalized=True),
+        ])
+
+        video_reader = VideoReader(
+            uri="assets/example.mp4",
+            mono=True,
+            height=320,
+            width=480,
+            video_fps=30,
+            audio_fps=48000,
+            video_transforms=video_transforms,
+            audio_transforms=audio_transforms,
+        )
+
+        # one-by-one
+        for frame in video_reader:
+            video_frame, audio_frame = frame["video_frames"], frame["audio_frames"]
+
+        # window = video fps * secs
+        window = 30 * 10
+        for start_index in range(0, len(video_reader), window):
+            frames = video_reader[start_index : start_index + window]
+            video_frames, audio_frames = frame["video_frames"], frame["audio_frames"]
+
+    """
+
     def __init__(
         self,
         uri: str,
@@ -38,6 +102,32 @@ class VideoReader(Dataset):
         audio_transforms: V.Compose | None = None,
         **kwargs,
     ) -> None:
+        """
+        Args:
+            uri (str): path to video file.
+            mono (bool, optional): boolean flag to use single mono channel, otherwise two stereo channels is used.
+                Defaults to True.
+            bridge (str, optional): type of tensors returned by decord AVReader.
+                Defaults to "torch".
+            height (int | None, optional): target height size of video frame.
+                Source height of video frame is adjusted to this value.
+                Defaults to None.
+            width (int | None, optional): target width size of video frame.
+                Source width of video frame is adjusted to this value.
+                Defaults to None.
+            video_fps (int, optional): target number of video frames per second.
+                Source video fps is adjusted to this value.
+                Defaults to 30.
+            audio_fps (int, optional): target number of audio signals per second (Hz).
+                Source audio fps is adjusted to this value.
+                Defaults to 48000.
+            video_transforms (V.Compose | None, optional): composition of transforms
+                as preprocessing pipeline for video frames which applies to each frame/window of video frames one-by-one.
+                Defaults to None.
+            audio_transforms (V.Compose | None, optional): composition of transforms
+                as preprocessing pipeline for audio frames which applied to each frame/window of audio frames one-by-one.
+                Defaults to None.
+        """
         decord.bridge.set_bridge(new_bridge=bridge)
 
         self.uri = uri
@@ -84,6 +174,10 @@ class VideoReader(Dataset):
         self.audio_transforms = audio_transforms
 
     def __len__(self) -> int:
+        """
+        Returns:
+            int: number of video frames.
+        """
         return len(self.avreader)
 
     def _validate_indices(self, idx: slice, length: int) -> tuple[int, int, int]:
@@ -149,7 +243,15 @@ class VideoReader(Dataset):
 
         return h
 
-    def __getitem__(self, idx: int | slice) -> dict:
+    def __getitem__(self, idx: int | slice | Tensor) -> dict:
+        """Gets single frame, several frames or window of the video file.
+
+        Args:
+            idx (int | slice | Tensor): index(es) or slice of indexes to extract from video file.
+
+        Returns:
+            dict[str, Any]: dictionary with `video_frames`, `audio_frames` and `meta` keys.
+        """
         if isinstance(idx, slice):
             start, stop, step = self._validate_indices(idx, self.num_video_frames)
             indices, pad_size = self._to_real_indices(

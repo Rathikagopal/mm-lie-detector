@@ -8,6 +8,7 @@
         119
     ],
     "files.trimTrailingWhitespace": true,
+    "python.defaultInterpreterPath": "python",
     "python.formatting.provider": "black",
     "python.linting.enabled": true,
     "python.linting.pylintEnabled": false,
@@ -21,5 +22,7 @@
     },
     "[json]": {
         "editor.formatOnSave": false
-    }
+    },
+    "autoDocstring.docstringFormat": "google",
+    "esbonio.sphinx.confDir": ""
 }

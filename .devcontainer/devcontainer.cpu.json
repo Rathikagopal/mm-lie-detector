@@ -2,7 +2,7 @@
     "name": "mm-lie-detector",
     "build": {
         "dockerfile": "Dockerfile.cpu",
-        "context": "../",
+        "context": "../"
     },
     "forwardPorts": [
         7999

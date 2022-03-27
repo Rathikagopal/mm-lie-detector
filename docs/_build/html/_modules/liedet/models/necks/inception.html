@@ -170,16 +170,29 @@
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../../api/models/index.html">liedet.models</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/models/backbones/index.html">backbones</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/models/backbones/index.html">backbones</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/backbones/ast.html">ast</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/backbones/timesformer.html">timesformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/backbones/mm_transformer.html">mm_transformer</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/models/necks/index.html">necks</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/necks/inception.html">Inception</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/models/heads/index.html">heads</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/heads/ast_head.html">ast_head</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/heads/timesformer_head.html">timesformer_head</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/heads/iou_aware.html">iou_aware</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/models/detectors/index.html">detectors</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/models/necks/index.html">necks</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/necks/inception.html">inception</a></li>
 </ul>
 </li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/models/detectors/index.html">detectors</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/detectors/audio.html">audio</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/detectors/landmarks.html">landmarks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/detectors/tinaface.html">tinaface</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/models/e2e.html">e2e</a></li>
 </ul>
 </li>
 </ul>
@@ -215,11 +228,13 @@
         </div>
         <article role="main">
           <h1>Source code for liedet.models.necks.inception</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
 
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
-<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">nn</span>
 
 <span class="kn">from</span> <span class="nn">mmcv.cnn</span> <span class="kn">import</span> <span class="n">ConvModule</span><span class="p">,</span> <span class="n">xavier_init</span>
 
@@ -228,16 +243,41 @@
 
 <div class="viewcode-block" id="Inception"><a class="viewcode-back" href="../../../../api/models/necks/index.html#liedet.models.necks.inception.Inception">[docs]</a><span class="nd">@registry</span><span class="o">.</span><span class="n">register_module</span><span class="p">()</span>
 <span class="k">class</span> <span class="nc">Inception</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">"""Inception module</span>
+
+<span class="sd">    This architecture is used on the coarsest grids to promote high dimensional representations.</span>
+
+<span class="sd">    See also: `Inception Module`_, `Rethinking the Inception Architecture for Computer Vision`_.</span>
+
+<span class="sd">    .. _`Inception Module`: https://paperswithcode.com/method/inception-module</span>
+<span class="sd">    .. _`Rethinking the Inception Architecture for Computer Vision`: https://arxiv.org/pdf/1512.00567v3.pdf</span>
+
+<span class="sd">    """</span>
+
 <div class="viewcode-block" id="Inception.__init__"><a class="viewcode-back" href="../../../../api/models/necks/index.html#liedet.models.necks.inception.Inception.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">in_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">num_levels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">conv_cfg</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">norm_cfg</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">dcn_cfg</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">conv_cfg</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">norm_cfg</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">dcn_cfg</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">share</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Args:</span>
+<span class="sd">            in_channels (int): number of input channels.</span>
+<span class="sd">            num_levels (int): number of feature levels.</span>
+<span class="sd">            conv_cfg (dict[str, Any] | None, optional): dictionary with parameters of convolutional layers.</span>
+<span class="sd">                Defaults to None.</span>
+<span class="sd">            norm_cfg (dict[str, Any] | None, optional): dictionary with parameters of normalization layer.</span>
+<span class="sd">                Defaults to None.</span>
+<span class="sd">            dcn_cfg (dict[str, Any] | None, optional): dictionary with parameters for deformable</span>
+<span class="sd">                convolutional layers.</span>
+<span class="sd">                Defaults to None.</span>
+<span class="sd">            share (bool, optional): boolean flag to share convolutions over levels of features.</span>
+<span class="sd">                Defaults to False.</span>
+<span class="sd">        """</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span> <span class="o">=</span> <span class="n">in_channels</span>
@@ -302,12 +342,21 @@
                 <span class="n">act_cfg</span><span class="o">=</span><span class="n">act_cfg</span><span class="p">,</span>
             <span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">init_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Inception.init_weights"><a class="viewcode-back" href="../../../../api/models/necks/index.html#liedet.models.necks.inception.Inception.init_weights">[docs]</a>    <span class="k">def</span> <span class="nf">init_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">"""Weights initialization."""</span>
         <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">():</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">):</span>
-                <span class="n">xavier_init</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">distribution</span><span class="o">=</span><span class="s2">"uniform"</span><span class="p">)</span>
+                <span class="n">xavier_init</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">distribution</span><span class="o">=</span><span class="s2">"uniform"</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Inception.forward"><a class="viewcode-back" href="../../../../api/models/necks/index.html#liedet.models.necks.inception.Inception.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
+<div class="viewcode-block" id="Inception.forward"><a class="viewcode-back" href="../../../../api/models/necks/index.html#liedet.models.necks.inception.Inception.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+        <span class="sd">"""Forwards features of each feature levels to convolutional blocks.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            input (tuple[Tensor, ...]): input tuple of level features.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple[Tensor, ...]: output tuple of level features after inception.</span>
+<span class="sd">        """</span>
         <span class="n">outs</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_levels</span><span class="p">):</span>
             <span class="n">x</span> <span class="o">=</span> <span class="nb">input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>

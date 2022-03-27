@@ -170,16 +170,29 @@
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../../api/models/index.html">liedet.models</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/models/backbones/index.html">backbones</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/models/backbones/index.html">backbones</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/backbones/ast.html">ast</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/backbones/timesformer.html">timesformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/backbones/mm_transformer.html">mm_transformer</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/models/necks/index.html">necks</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/necks/inception.html">Inception</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/models/heads/index.html">heads</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/heads/ast_head.html">ast_head</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/heads/timesformer_head.html">timesformer_head</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/heads/iou_aware.html">iou_aware</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/models/detectors/index.html">detectors</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/models/necks/index.html">necks</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/necks/inception.html">inception</a></li>
 </ul>
 </li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/models/detectors/index.html">detectors</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/detectors/audio.html">audio</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/detectors/landmarks.html">landmarks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/detectors/tinaface.html">tinaface</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/models/e2e.html">e2e</a></li>
 </ul>
 </li>
 </ul>
@@ -216,24 +229,43 @@
         <article role="main">
           <h1>Source code for liedet.models.detectors.tinaface</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
 
 <span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">Tensor</span>
 
 <span class="kn">from</span> <span class="nn">mmcv.parallel</span> <span class="kn">import</span> <span class="n">collate</span>
-<span class="kn">from</span> <span class="nn">mmcv.utils</span> <span class="kn">import</span> <span class="n">ConfigDict</span>
 
 <span class="kn">from</span> <span class="nn">..registry</span> <span class="kn">import</span> <span class="n">build</span><span class="p">,</span> <span class="n">registry</span>
 <span class="kn">from</span> <span class="nn">.bbox</span> <span class="kn">import</span> <span class="n">SingleStageDetector</span>
 
 
-<div class="viewcode-block" id="Tinaface"><a class="viewcode-back" href="../../../../api/models/detectors/index.html#liedet.models.detectors.tinaface.Tinaface">[docs]</a><span class="nd">@registry</span><span class="o">.</span><span class="n">register_module</span><span class="p">()</span>
+<div class="viewcode-block" id="Tinaface"><a class="viewcode-back" href="../../../../api/models/detectors/tinaface.html#liedet.models.detectors.tinaface.Tinaface">[docs]</a><span class="nd">@registry</span><span class="o">.</span><span class="n">register_module</span><span class="p">()</span>
 <span class="k">class</span> <span class="nc">Tinaface</span><span class="p">(</span><span class="n">SingleStageDetector</span><span class="p">):</span>
-<div class="viewcode-block" id="Tinaface.__init__"><a class="viewcode-back" href="../../../../api/models/detectors/index.html#liedet.models.detectors.tinaface.Tinaface.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame_to_result</span><span class="p">:</span> <span class="n">ConfigDict</span><span class="p">,</span> <span class="n">extract_bboxes</span><span class="p">:</span> <span class="n">ConfigDict</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">"""Tinaface single stage detector.</span>
+
+<span class="sd">    This model combines ResNet50 backbone, Future Pyramid Network and Inception module.</span>
+
+<span class="sd">    See also: `TinaFace: Strong but Simple Baseline for Face Detection`_.</span>
+
+<span class="sd">    .. _`TinaFace: Strong but Simple Baseline for Face Detection`: https://arxiv.org/pdf/2011.13183v3.pdf</span>
+
+<span class="sd">    """</span>
+
+<div class="viewcode-block" id="Tinaface.__init__"><a class="viewcode-back" href="../../../../api/models/detectors/tinaface.html#liedet.models.detectors.tinaface.Tinaface.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame_to_result</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">extract_bboxes</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Args:</span>
+<span class="sd">            frame_to_result (dict[str, Any]): dictionary of parameters</span>
+<span class="sd">                for converting model results to bounded boxes.</span>
+<span class="sd">            extract_bboxes (dict[str, Any]): dictionary of parameters</span>
+<span class="sd">                for extracting bboxes.</span>
+<span class="sd">        """</span>
+
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">frame_to_result</span> <span class="o">=</span> <span class="n">build</span><span class="p">(</span><span class="n">cfg</span><span class="o">=</span><span class="n">frame_to_result</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">extract_bboxes</span> <span class="o">=</span> <span class="n">build</span><span class="p">(</span><span class="n">cfg</span><span class="o">=</span><span class="n">extract_bboxes</span><span class="p">)</span>
-        
+
         <span class="c1"># TODO: remove me</span>
         <span class="n">state_dict</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">"weights/tinaface_r50_fpn_gn_dcn.pth"</span><span class="p">,</span> <span class="n">map_location</span><span class="o">=</span><span class="s2">"cpu"</span><span class="p">)</span>
         <span class="n">new_state_dict</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
@@ -248,8 +280,21 @@
             <span class="n">new_state_dict</span><span class="p">[</span><span class="n">new_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">state_dict</span><span class="p">[</span><span class="n">old_key</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">new_state_dict</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Tinaface.forward"><a class="viewcode-back" href="../../../../api/models/detectors/index.html#liedet.models.detectors.tinaface.Tinaface.forward">[docs]</a>    <span class="nd">@torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">()</span>
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="Tinaface.forward"><a class="viewcode-back" href="../../../../api/models/detectors/tinaface.html#liedet.models.detectors.tinaface.Tinaface.forward">[docs]</a>    <span class="nd">@torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+        <span class="sd">"""Forwards batch of input images to model, regresses and extracts bboxes.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x (Tensor): batch pf input images.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple[Tensor, ...]: tuple of extracted bboxes.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            The result is tuple due to different sizes of extracted bboxes.</span>
+
+<span class="sd">        """</span>
         <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">x</span><span class="p">:</span>
             <span class="n">h</span> <span class="o">=</span> <span class="n">collate</span><span class="p">([</span><span class="n">frame</span><span class="p">])</span>

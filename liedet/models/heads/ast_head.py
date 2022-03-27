@@ -6,4 +6,6 @@ from .timesformer_head import TimeSformerHead
 
 @registry.register_module()
 class ASTHead(TimeSformerHead):
+    """Similar to TimeSformerHead."""
+
     pass

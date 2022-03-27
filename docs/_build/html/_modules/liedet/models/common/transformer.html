@@ -170,16 +170,29 @@
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../../api/models/index.html">liedet.models</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/models/backbones/index.html">backbones</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/models/backbones/index.html">backbones</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/backbones/ast.html">ast</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/backbones/timesformer.html">timesformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/backbones/mm_transformer.html">mm_transformer</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/models/necks/index.html">necks</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/necks/inception.html">Inception</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/models/heads/index.html">heads</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/heads/ast_head.html">ast_head</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/heads/timesformer_head.html">timesformer_head</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/heads/iou_aware.html">iou_aware</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/models/detectors/index.html">detectors</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/models/necks/index.html">necks</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/necks/inception.html">inception</a></li>
 </ul>
 </li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/models/detectors/index.html">detectors</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/detectors/audio.html">audio</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/detectors/landmarks.html">landmarks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/models/detectors/tinaface.html">tinaface</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/models/e2e.html">e2e</a></li>
 </ul>
 </li>
 </ul>
@@ -234,7 +247,7 @@
 <span class="kn">from</span> <span class="nn">..registry</span> <span class="kn">import</span> <span class="n">registry</span>
 
 
-<div class="viewcode-block" id="TransformerEncoder"><a class="viewcode-back" href="../../../../api/models/backbones/index.html#liedet.models.common.transformer.TransformerEncoder">[docs]</a><span class="nd">@registry</span><span class="o">.</span><span class="n">register_module</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="TransformerEncoder"><a class="viewcode-back" href="../../../../api/models/backbones/timesformer.html#liedet.models.common.transformer.TransformerEncoder">[docs]</a><span class="nd">@registry</span><span class="o">.</span><span class="n">register_module</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">TransformerEncoder</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">TransformerEncoder</span><span class="p">):</span>
     <span class="sd">"""Wrapper of torch TransformerEncoder.</span>
 
@@ -248,10 +261,10 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">encoder_layer</span><span class="o">=</span><span class="n">encoder_layer</span><span class="p">,</span> <span class="n">num_layers</span><span class="o">=</span><span class="n">num_layers</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="DividedTemporalAttentionWithNorm"><a class="viewcode-back" href="../../../../api/models/backbones/index.html#liedet.models.common.transformer.DividedTemporalAttentionWithNorm">[docs]</a><span class="k">class</span> <span class="nc">DividedTemporalAttentionWithNorm</span><span class="p">(</span><span class="n">BaseModule</span><span class="p">):</span>
+<div class="viewcode-block" id="DividedTemporalAttentionWithNorm"><a class="viewcode-back" href="../../../../api/models/backbones/timesformer.html#liedet.models.common.transformer.DividedTemporalAttentionWithNorm">[docs]</a><span class="k">class</span> <span class="nc">DividedTemporalAttentionWithNorm</span><span class="p">(</span><span class="n">BaseModule</span><span class="p">):</span>
     <span class="sd">"""Temporal Attention in Divided Space Time Attention."""</span>
 
-<div class="viewcode-block" id="DividedTemporalAttentionWithNorm.__init__"><a class="viewcode-back" href="../../../../api/models/backbones/index.html#liedet.models.common.transformer.DividedTemporalAttentionWithNorm.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<div class="viewcode-block" id="DividedTemporalAttentionWithNorm.__init__"><a class="viewcode-back" href="../../../../api/models/backbones/timesformer.html#liedet.models.common.transformer.DividedTemporalAttentionWithNorm.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">embed_dims</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">num_heads</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -296,11 +309,11 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_weights</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="DividedTemporalAttentionWithNorm.init_weights"><a class="viewcode-back" href="../../../../api/models/backbones/index.html#liedet.models.common.transformer.DividedTemporalAttentionWithNorm.init_weights">[docs]</a>    <span class="k">def</span> <span class="nf">init_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="DividedTemporalAttentionWithNorm.init_weights"><a class="viewcode-back" href="../../../../api/models/backbones/timesformer.html#liedet.models.common.transformer.DividedTemporalAttentionWithNorm.init_weights">[docs]</a>    <span class="k">def</span> <span class="nf">init_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">"""Constant weights initialization of temporal linear layer."""</span>
         <span class="n">constant_init</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temporal_fc</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DividedTemporalAttentionWithNorm.forward"><a class="viewcode-back" href="../../../../api/models/backbones/index.html#liedet.models.common.transformer.DividedTemporalAttentionWithNorm.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">residual</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+<div class="viewcode-block" id="DividedTemporalAttentionWithNorm.forward"><a class="viewcode-back" href="../../../../api/models/backbones/timesformer.html#liedet.models.common.transformer.DividedTemporalAttentionWithNorm.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">residual</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
         <span class="sd">"""Forwards Divided Temporal Attention with Normalization</span>
 
 <span class="sd">        (Input)--[Extract Class Token]--&gt;(Initial Class Token)</span>
@@ -448,13 +461,13 @@
         <span class="k">return</span> <span class="n">new_query</span>
 
 
-<div class="viewcode-block" id="FFNWithNorm"><a class="viewcode-back" href="../../../../api/models/backbones/index.html#liedet.models.common.transformer.FFNWithNorm">[docs]</a><span class="k">class</span> <span class="nc">FFNWithNorm</span><span class="p">(</span><span class="n">FFN</span><span class="p">):</span>
+<div class="viewcode-block" id="FFNWithNorm"><a class="viewcode-back" href="../../../../api/models/backbones/timesformer.html#liedet.models.common.transformer.FFNWithNorm">[docs]</a><span class="k">class</span> <span class="nc">FFNWithNorm</span><span class="p">(</span><span class="n">FFN</span><span class="p">):</span>
     <span class="sd">"""FFN with pre normalization layer.</span>
 
 <span class="sd">    It apply one normalization layer before forwarding the input data to feed-forward networks.</span>
 <span class="sd">    """</span>
 
-<div class="viewcode-block" id="FFNWithNorm.__init__"><a class="viewcode-back" href="../../../../api/models/backbones/index.html#liedet.models.common.transformer.FFNWithNorm.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">norm_cfg</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">"LN"</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="FFNWithNorm.__init__"><a class="viewcode-back" href="../../../../api/models/backbones/timesformer.html#liedet.models.common.transformer.FFNWithNorm.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">norm_cfg</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">"LN"</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">"""</span>
 <span class="sd">        Args:</span>
 <span class="sd">            embed_dims (int): Dimensions of embedding.</span>
@@ -481,7 +494,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">norm</span> <span class="o">=</span> <span class="n">build_norm_layer</span><span class="p">(</span><span class="n">norm_cfg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed_dims</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="FFNWithNorm.forward"><a class="viewcode-back" href="../../../../api/models/backbones/index.html#liedet.models.common.transformer.FFNWithNorm.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">residual</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+<div class="viewcode-block" id="FFNWithNorm.forward"><a class="viewcode-back" href="../../../../api/models/backbones/timesformer.html#liedet.models.common.transformer.FFNWithNorm.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">residual</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
         <span class="sd">"""Applies normalization and then forwards the input data to feed-forward networks.</span>
 
 <span class="sd">        Args:</span>

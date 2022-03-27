@@ -318,7 +318,7 @@ from liedet.datasets.custom_dataset import CustomDataset
 
 ### 7.2. Modify train/valid/infer parameters
 
-All configurations are stored in separate files in `config/` dirrectory. To modity something, for example `batch_size`, dataset `root`, preprocessing pipeline, model configuration and parts, `learning rate`, `metrics`, `callbacks`, `criterion` and other and other, just open and edit existing config file or copy it and edit.
+All configurations are stored in separate files in `config/` directory. To modify something, for example `batch_size`, dataset `root`, preprocessing pipeline, model configuration and parts, `learning rate`, `metrics`, `callbacks`, `criterion` and other and other, just open and edit existing config file or copy it and edit.
 
 To use custom dataset, modify `dataset` attribute in configuration file. If you register your dataset class you use it like:
 

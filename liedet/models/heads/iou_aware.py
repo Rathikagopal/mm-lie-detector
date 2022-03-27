@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Optional
+from typing import Any
 
 import torch.nn as nn
 
@@ -12,15 +12,39 @@ from ..registry import registry
 
 @registry.register_module()
 class IoUAwareRetinaHead(AnchorHead):
+    """IoU Aware Retina Head for Single-Stage Object Detector.
+
+    It combines
+    - sequence of Convolutional layers to generate logits for target classes
+    - sequence of Convolutional layers to regress bboxes
+    - three last Convolutional layers to predict scores, bboxes and iou
+
+    See also: `IoU-aware Single-stage Object Detector for Accurate Localization`_.
+
+    .. _`IoU-aware Single-stage Object Detector for Accurate Localization`: https://arxiv.org/abs/1912.05992
+
+    """
+
     def __init__(
         self,
         num_classes: int,
         in_channels: int,
         stacked_convs: int = 4,
-        conv_cfg: Optional[dict] = None,
-        norm_cfg: Optional[dict] = None,
+        conv_cfg: dict[str, Any] | None = None,
+        norm_cfg: dict[str, Any] | None = None,
         **kwargs,
     ) -> None:
+        """
+        Args:
+            num_classes (int): number of target classes
+            in_channels (int): number of input features
+            stacked_convs (int, optional): number of stacked convolutionals.
+                Defaults to 4.
+            conv_cfg (dict[str, Any] | None, optional): dictionary with parameters of convolution layers.
+                Defaults to None.
+            norm_cfg (dict[str, Any] | None, optional): dictionary with parameters for weights initialization.
+                Defaults to None.
+        """
         self.stacked_convs = stacked_convs
         self.conv_cfg = conv_cfg
         self.norm_cfg = norm_cfg

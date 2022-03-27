@@ -1,4 +1,3 @@
-# Copyright (c) OpenMMLab. All rights reserved.
 from __future__ import annotations
 
 from typing import Any
@@ -8,6 +7,7 @@ from einops import rearrange
 
 import torch
 import torch.nn as nn
+from torch import Tensor
 from torch.nn.modules.utils import _pair
 
 from mmcv import ConfigDict
@@ -16,10 +16,20 @@ from mmcv.cnn.utils.weight_init import trunc_normal_
 from mmcv.runner import _load_checkpoint, load_state_dict
 from mmdet.utils.logger import get_root_logger
 
-from ..registry import build, registry
-
 
 class PatchEmbed(nn.Module):
+    """Patch Embedding for batch of single images.
+
+    | ((B, C, T, H, W))--
+    |    --[Merge B and T dims]--
+    |    --[Projection]--
+    |    --[Flatten]--
+    | -->((B * T, F))
+    |
+    |    where F - embedding dim
+
+    """
+
     def __init__(
         self,
         img_size: int | tuple[int, int],
@@ -30,6 +40,21 @@ class PatchEmbed(nn.Module):
         conv_cfg: dict[str, Any] = dict(type="Conv2d"),
         **kwargs,
     ) -> None:
+        """
+        Args:
+            img_size (int | tuple[int, int]): size of input image.
+            patch_size (int | tuple[int, int]): size of patch size.
+            stride (int | tuple[int, int] | None, optional): stride size between patches.
+                If `None` when patch size is used.
+                Defaults to None.
+            in_channels (int, optional): number of channels of input image.
+                Defaults to 3.
+            embed_dims (int, optional): number of embedding features.
+                Defaults to 768.
+            conv_cfg (dict[str, Any], optional): dictionary of parameters
+                of projection layer.
+                Defaults to dict(type="Conv2d").
+        """
         super().__init__()
 
         self.img_size = _pair(img_size)
@@ -50,18 +75,36 @@ class PatchEmbed(nn.Module):
         self.init_weights()
 
     def init_weights(self) -> None:
-        # Lecun norm from ClassyVision
+        """Lecun norm initialization of projection weights"""
         kaiming_init(self.projection, mode="fan_in", nonlinearity="linear")
 
-    def forward(self, x) -> nn.Module:
+    def forward(self, x: Tensor) -> Tensor:
+        """Projects batch of images to batch of embeddings over time.
+
+        Args:
+            x (Tensor): batch of input images
+
+        Returns:
+            Tensor: batch of embeddings
+        """
         x = rearrange(x, "b c t h w -> (b t) c h w")
         x = self.projection(x).flatten(2).transpose(1, 2)
 
         return x
 
 
-@registry.register_module()
 class TimeSformer(nn.Module):
+    """TimeSformer model.
+
+    This class implements Visual Tranfromer for videos
+    which uses new types of Self-Attention specific to video: over space and over time.
+
+    See also: `Is Space-Time Attention All You Need for Video Understanding?`_
+
+    .. _`Is Space-Time Attention All You Need for Video Understanding?`: https://arxiv.org/pdf/2102.05095.pdf
+
+    """
+
     supported_attention_types = {"divided_space_time", "space_only", "joint_space_time"}
 
     def __init__(
@@ -74,13 +117,40 @@ class TimeSformer(nn.Module):
         num_transformer_layers: int = 12,
         in_channels: int = 3,
         dropout_ratio: float = 0.0,
-        transformer_layers=None,
+        transformer_layers: dict | list | None = None,
         pretrained: str
         | None = "https://download.openmmlab.com/mmaction/recognition/timesformer/vit_base_patch16_224.pth",
         attention_type: str = "divided_space_time",
         norm_cfg: dict[str, Any] = dict(type="LN", eps=1e-6),
         **kwargs,
     ) -> None:
+        """
+        Args:
+            num_frames (int): number of frames in each batch
+            img_size (int | tuple[int, int]): size of input image.
+            patch_size (int | tuple[int, int]): size of patch.
+            embed_dims (int, optional): number of embedding features.
+                Defaults to 768.
+            num_heads (int, optional): number of parallel computed attentions.
+                Defaults to 12.
+            num_transformer_layers (int, optional): depth of transformer encoder.
+                Defaults to 12.
+            in_channels (int, optional): number of channels of input image.
+                Defaults to 3.
+            dropout_ratio (float, optional): probability of dropout after embedding.
+                Defaults to 0.0.
+            transformer_layers (dict | list | None, optional): single dictionary or sequence of dictionaries
+                with configs of tranformer layers. Layers is applied with respect to order in list.
+                Defaults to None.
+            pretrained (str | None, optional):pretrained (str | None, optional): path
+                to a local file or url link to pretrained weights.
+                Defaults to `https://download.openmmlab.com/mmaction/recognition/timesformer/vit_base_patch16_224.pth`.
+            attention_type (str, optional): type of attention for transformer layers.
+                Should be one of {"divided_space_time", "space_only", "joint_space_time"}
+                Defaults to "divided_space_time".
+            norm_cfg (dict[str, Any], optional): dictionary with parameters for weights initializations.
+                Defaults to dict(type="LN", eps=1e-6).
+        """
         super().__init__()
 
         assert attention_type in self.supported_attention_types, f"Unsupported Attention Type {attention_type}!"
@@ -226,7 +296,42 @@ class TimeSformer(nn.Module):
             load_state_dict(self, state_dict, strict=False, logger=logger)
 
     def forward(self, x):
-        """Defines the computation performed at every call."""
+        """Forwards input tensor to TimeSformer.
+
+        1. attention_type == space_only
+
+        | (Input)--
+        |    --[PatchEmbed]--
+        |    --[Add Class Token expanded over patches]--
+        |    --[Add Position Embedding]--
+        |    --[Dropout]--
+        |    --[Attentions]--
+        |    --[Mean over expanded Class Token]--
+        |    --[Normalization]--
+        | -->(Output)
+
+        2. attention_type != space_only
+
+        | (Input)--
+        |    --[PatchEmbed]--
+        |    --[Add Class Token expanded over patches]--
+        |    --[Add Position Embedding]--
+        |    --[Dropout]--
+        |    --[Pop Class Token]
+        |    --[Add Time Embedding]--
+        |    --[Dropout]--
+        |    --[Merge Patch and Time dims]--
+        |    --[Concat with Class Token]--
+        |    --[Attentions]--
+        |    --[Normalization]--
+        | -->(Output)
+
+        Args:
+            x (Tensor): input batch of sequences of images.
+
+        Returns:
+            Tensor: output class token.
+        """
         # x [batch_size * num_frames, num_patches, embed_dims]
         batches = x.shape[0]
         x = self.patch_embed(x)

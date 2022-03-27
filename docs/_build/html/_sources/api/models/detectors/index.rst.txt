@@ -2,7 +2,11 @@ Detectors
 ==========
 
 .. toctree::
-    :hidden:
+
+    audio <audio>
+    landmarks <landmarks>
+    tinaface <tinaface>
+
 
 
 
@@ -14,37 +18,12 @@ Audial Detectors
     :special-members:
     :show-inheritance:
 
-.. autoclass:: liedet.models.detectors.audio.src.AudioModel
-    :members:
-    :special-members:
-    :show-inheritance:
-
-.. autoclass:: liedet.models.detectors.audio.src.Torch_emotion
-    :members:
-    :special-members:
-    :show-inheritance:
-
-.. autoclass:: liedet.models.detectors.audio.src.TempsAnalyzer.TempsAnalyzer
-    :members:
-    :special-members:
-    :show-inheritance:
-
-.. autoclass:: liedet.models.detectors.audio.src.ToneAnalyzer.ToneAnalyzer
-    :members:
-    :special-members:
-    :show-inheritance:
-
-.. autoclass:: liedet.models.detectors.audio.src.VolumeAnalyzer.VolumeAnalyzer
-    :members:
-    :special-members:
-    :show-inheritance:
-
 
 Visual Detectors
 ----------------
 
-Landmarks Detector
-~~~~~~~~~~~~~~~~~~
+Landmarks Detectors
+~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: liedet.models.detectors.landmarks.FaceLandmarks
     :members:
@@ -52,8 +31,8 @@ Landmarks Detector
     :show-inheritance:
 
 
-Face Detector
-~~~~~~~~~~~~~
+Face Detectors
+~~~~~~~~~~~~~~~
 
 .. autoclass:: liedet.models.detectors.tinaface.Tinaface
     :members:

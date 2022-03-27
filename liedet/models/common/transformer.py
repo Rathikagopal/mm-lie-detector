@@ -1,8 +1,12 @@
-# Copyright (c) OpenMMLab. All rights reserved.
+from __future__ import annotations
+
+from typing import Any
+
 from einops import rearrange
 
 import torch
 import torch.nn as nn
+from torch import Tensor
 
 from mmcv.cnn import build_norm_layer, constant_init
 from mmcv.cnn.bricks.transformer import FFN, build_dropout
@@ -15,6 +19,11 @@ from ..registry import registry
 
 @registry.register_module(force=True)
 class TransformerEncoder(nn.TransformerEncoder):
+    """Wrapper of torch TransformerEncoder.
+
+    The class allows to create transformer from config file.
+    """
+
     def __init__(self, encoder_layer, num_layers, norm=None):
         encoder_layer = build_from_cfg(cfg=encoder_layer, registry=registry)
         norm = build_from_cfg(cfg=norm, registry=registry) if norm is not None else None
@@ -23,38 +32,39 @@ class TransformerEncoder(nn.TransformerEncoder):
 
 
 class DividedTemporalAttentionWithNorm(BaseModule):
-    """Temporal Attention in Divided Space Time Attention.
-
-    Args:
-        embed_dims (int): Dimensions of embedding.
-        num_heads (int): Number of parallel attention heads in
-            TransformerCoder.
-        num_frames (int): Number of frames in the video.
-        attn_drop (float): A Dropout layer on attn_output_weights. Defaults to
-            0..
-        proj_drop (float): A Dropout layer after `nn.MultiheadAttention`.
-            Defaults to 0..
-        dropout_layer (dict): The dropout_layer used when adding the shortcut.
-            Defaults to `dict(type='DropPath', drop_prob=0.1)`.
-        norm_cfg (dict): Config dict for normalization layer. Defaults to
-            `dict(type='LN')`.
-        init_cfg (dict | None): The Config for initialization. Defaults to
-            None.
-    """
+    """Temporal Attention in Divided Space Time Attention."""
 
     def __init__(
         self,
-        embed_dims,
-        num_heads,
-        num_frames,
-        attn_drop=0.0,
-        proj_drop=0.0,
-        dropout_layer=dict(type="DropPath", drop_prob=0.1),
-        norm_cfg=dict(type="LN"),
-        init_cfg=None,
-        **kwargs
+        embed_dims: int,
+        num_heads: int,
+        num_frames: int,
+        attn_drop: float = 0.0,
+        proj_drop: float = 0.0,
+        dropout_layer: dict[str, Any] = dict(type="DropPath", drop_prob=0.1),
+        norm_cfg: dict[str, Any] = dict(type="LN"),
+        init_cfg: dict[str, Any] | None = None,
+        **kwargs,
     ):
+        """
+        Args:
+            embed_dims (int): Dimensions of embedding.
+            num_heads (int): Number of parallel attention heads in
+                TransformerCoder.
+            num_frames (int): Number of frames in the video.
+            attn_drop (float): A Dropout layer on attn_output_weights. Defaults to
+                0.0.
+            proj_drop (float): A Dropout layer after `nn.MultiheadAttention`.
+                Defaults to 0.0.
+            dropout_layer (dict): The dropout_layer used when adding the shortcut.
+                Defaults to `dict(type='DropPath', drop_prob=0.1)`.
+            norm_cfg (dict): Config dict for normalization layer. Defaults to
+                `dict(type='LN')`.
+            init_cfg (dict | None): The Config for initialization. Defaults to
+                None.
+        """
         super().__init__(init_cfg)
+
         self.embed_dims = embed_dims
         self.num_heads = num_heads
         self.num_frames = num_frames
@@ -69,10 +79,30 @@ class DividedTemporalAttentionWithNorm(BaseModule):
 
         self.init_weights()
 
-    def init_weights(self):
+    def init_weights(self) -> None:
+        """Constant weights initialization of temporal linear layer."""
         constant_init(self.temporal_fc, val=0, bias=0)
 
-    def forward(self, query, key=None, value=None, residual=None, **kwargs):
+    def forward(self, query: Tensor, key=None, value=None, residual=None, **kwargs) -> Tensor:
+        """Forwards Divided Temporal Attention with Normalization
+
+        (Input)--[Extract Class Token]-->(Initial Class Token)
+
+        (Input without Class Token)--
+            --[Normalization]--
+            --[Temporal Attention]--
+            --[Dropout]--
+            --[Temporal Linear]--
+            --[Identity]--
+            --[Add Initial Class Token]--
+        -->(Output)
+
+        Args:
+            query (Tensor): input time sequence.
+
+        Returns:
+            Tensor: output time sequence.
+        """
         assert residual is None, "Always adding the shortcut in the forward function"
 
         init_cls_token = query[:, 0, :].unsqueeze(1)
@@ -94,42 +124,43 @@ class DividedTemporalAttentionWithNorm(BaseModule):
         # ret_value [batch_size, num_patches * num_frames + 1, embed_dims]
         new_query_t = identity + res_temporal
         new_query = torch.cat((init_cls_token, new_query_t), 1)
+
         return new_query
 
 
 class DividedSpatialAttentionWithNorm(BaseModule):
-    """Spatial Attention in Divided Space Time Attention.
-
-    Args:
-        embed_dims (int): Dimensions of embedding.
-        num_heads (int): Number of parallel attention heads in
-            TransformerCoder.
-        num_frames (int): Number of frames in the video.
-        attn_drop (float): A Dropout layer on attn_output_weights. Defaults to
-            0..
-        proj_drop (float): A Dropout layer after `nn.MultiheadAttention`.
-            Defaults to 0..
-        dropout_layer (dict): The dropout_layer used when adding the shortcut.
-            Defaults to `dict(type='DropPath', drop_prob=0.1)`.
-        norm_cfg (dict): Config dict for normalization layer. Defaults to
-            `dict(type='LN')`.
-        init_cfg (dict | None): The Config for initialization. Defaults to
-            None.
-    """
+    """Spatial Attention in Divided Space Time Attention."""
 
     def __init__(
         self,
-        embed_dims,
-        num_heads,
-        num_frames,
-        attn_drop=0.0,
-        proj_drop=0.0,
-        dropout_layer=dict(type="DropPath", drop_prob=0.1),
-        norm_cfg=dict(type="LN"),
-        init_cfg=None,
-        **kwargs
+        embed_dims: int,
+        num_heads: int,
+        num_frames: int,
+        attn_drop: float = 0.0,
+        proj_drop: float = 0.0,
+        dropout_layer: dict[str, Any] = dict(type="DropPath", drop_prob=0.1),
+        norm_cfg: dict[str, Any] = dict(type="LN"),
+        init_cfg: dict[str, Any] | None = None,
+        **kwargs,
     ):
+        """
+        Args:
+            embed_dims (int): Dimensions of embedding.
+            num_heads (int): Number of parallel attention heads in TransformerCoder.
+            num_frames (int): Number of frames in the video.
+            attn_drop (float): A Dropout layer on attn_output_weights.
+                Defaults to 0.0.
+            proj_drop (float): A Dropout layer after `nn.MultiheadAttention`.
+                Defaults to 0.0.
+            dropout_layer (dict): The dropout_layer used when adding the shortcut.
+                Defaults to `dict(type='DropPath', drop_prob=0.1)`.
+            norm_cfg (dict): Config dict for normalization layer.
+                Defaults to `dict(type='LN')`.
+            init_cfg (dict | None): The Config for initialization.
+                Defaults to None.
+        """
         super().__init__(init_cfg)
+
         self.embed_dims = embed_dims
         self.num_heads = num_heads
         self.num_frames = num_frames
@@ -142,11 +173,30 @@ class DividedSpatialAttentionWithNorm(BaseModule):
 
         self.init_weights()
 
-    def init_weights(self):
+    def init_weights(self) -> None:
         # init DividedSpatialAttentionWithNorm by default
         pass
 
-    def forward(self, query, key=None, value=None, residual=None, **kwargs):
+    def forward(self, query: Tensor, key=None, value=None, residual=None, **kwargs) -> Tensor:
+        """Forwards Divided Spatial Attention with Normalization.
+
+        (Input)--
+            --[Expand Class Token over Spatial dim]--
+            --[Normalization]--
+            --[Spatial Attention]--
+            --[Dropout]--
+            --[Spatial Linear]--
+            --[Mean over expanded Class Tokens]--
+            --[Identity]--
+        -->(Output)
+
+        Args:
+            query (Tensor): input time sequence.
+
+        Returns:
+            Tensor: output time sequence.
+        """
+
         assert residual is None, "Always adding the shortcut in the forward function"
 
         identity = query
@@ -184,37 +234,46 @@ class DividedSpatialAttentionWithNorm(BaseModule):
 class FFNWithNorm(FFN):
     """FFN with pre normalization layer.
 
-    FFNWithNorm is implemented to be compatible with `BaseTransformerLayer`
-    when using `DividedTemporalAttentionWithNorm` and
-    `DividedSpatialAttentionWithNorm`.
-
-    FFNWithNorm has one main difference with FFN:
-
-    - It apply one normalization layer before forwarding the input data to
-        feed-forward networks.
-
-    Args:
-        embed_dims (int): Dimensions of embedding. Defaults to 256.
-        feedforward_channels (int): Hidden dimension of FFNs. Defaults to 1024.
-        num_fcs (int, optional): Number of fully-connected layers in FFNs.
-            Defaults to 2.
-        act_cfg (dict): Config for activate layers.
-            Defaults to `dict(type='ReLU')`
-        ffn_drop (float, optional): Probability of an element to be
-            zeroed in FFN. Defaults to 0..
-        add_residual (bool, optional): Whether to add the
-            residual connection. Defaults to `True`.
-        dropout_layer (dict | None): The dropout_layer used when adding the
-            shortcut. Defaults to None.
-        init_cfg (dict): The Config for initialization. Defaults to None.
-        norm_cfg (dict): Config dict for normalization layer. Defaults to
-            `dict(type='LN')`.
+    It apply one normalization layer before forwarding the input data to feed-forward networks.
     """
 
-    def __init__(self, *args, norm_cfg=dict(type="LN"), **kwargs):
+    def __init__(self, *args, norm_cfg: dict[str, Any] = dict(type="LN"), **kwargs) -> None:
+        """
+        Args:
+            embed_dims (int): Dimensions of embedding.
+                Defaults to 256.
+            feedforward_channels (int): Hidden dimension of FFNs.
+                Defaults to 1024.
+            num_fcs (int, optional): Number of fully-connected layers in FFNs.
+                Defaults to 2.
+            act_cfg (dict): Config for activate layers.
+                Defaults to `dict(type='ReLU')`
+            ffn_drop (float, optional): Probability of an element to be zeroed in FFN.
+                Defaults to 0..
+            add_residual (bool, optional): Whether to add the residual connection.
+                Defaults to `True`.
+            dropout_layer (dict | None): The dropout_layer used when adding the shortcut.
+                Defaults to None.
+            init_cfg (dict | None): The Config for initialization.
+                Defaults to None.
+            norm_cfg (dict): Config dict for normalization layer.
+                Defaults to `dict(type='LN')`.
+        """
+
         super().__init__(*args, **kwargs)
+
         self.norm = build_norm_layer(norm_cfg, self.embed_dims)[1]
 
-    def forward(self, x, residual=None):
+    def forward(self, x: Tensor, residual=None) -> Tensor:
+        """Applies normalization and then forwards the input data to feed-forward networks.
+
+        Args:
+            x (Tensor): input tensor.
+
+        Returns:
+            Tensor: output tensor.
+        """
+
         assert residual is None, "Cannot apply pre-norm with FFNWithNorm"
+
         return super().forward(self.norm(x), x)

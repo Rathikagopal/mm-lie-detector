@@ -5,6 +5,7 @@ from einops import rearrange
 
 import torch
 import torch.nn as nn
+from torch import Tensor
 
 from mmcv.cnn.utils.weight_init import kaiming_init, trunc_normal_
 from mmcv.utils import ConfigDict
@@ -15,6 +16,16 @@ from .registry import build, registry
 
 @registry.register_module()
 class LieDetector(BaseModule):
+    """Lie Detector Pipeline.
+
+    This class combines video and audio feature extractors.
+    After features extraction it concatenates features, add class token
+    and add position embedding.
+    Then it forwards them into time model to extract time dependent features.
+    At the end enriched class token is forwarded to classification header
+    which returns logits over target classes.
+    """
+
     def __init__(
         self,
         *,
@@ -28,7 +39,36 @@ class LieDetector(BaseModule):
         pos_embed: bool = True,
         init: bool = True,
         **kwargs,
-    ):
+    ) -> None:
+        """
+        Args:
+            time_model (nn.Module | dict): model to extract time-dependent features
+                or configuration dictionary to build it.
+            cls_head (nn.Module | dict): classification head or configuration dictionary
+                to build it.
+            features_dims (int | None, optional): size of features to embed.
+                If `None` when raw features are used, otherwise features are embedded.
+                Defaults to None.
+            embed_dims (int | None, optional): size of features embedding.
+                If `None` when features are not embedded,
+                otherwise if `features_dims` also is not `None`
+                then features are embedded to this size.
+                features_dims --[Projection]--> embed_dims
+                Defaults to None.
+            video_model (nn.Module | dict | None, optional): model to extract features
+                from sequence of images (video) or configuration dictionary to build it.
+                Defaults to None.
+            audio_model (nn.Module | dict | None, optional): model to extract features
+                from audio sequence or configuration dictionary to build it.
+                Defaults to None.
+            window (int, optional): number of video frames per window.
+                Defaults to 100.
+            pos_embed (bool, optional): boolean flag to use position embedding.
+                Mostly uses with Transformer time model.
+                Defaults to True.
+            init (bool, optional): boolean flag to initialize weights or load pretrained ones from config.
+                Defaults to True.
+        """
         super().__init__(init=False, **kwargs)
 
         if video_model is None and audio_model is None:
@@ -65,7 +105,17 @@ class LieDetector(BaseModule):
         if init:
             self.init_weights()
 
-    def forward(self, batch):
+    def forward(self, batch: dict[str, Tensor]) -> Tensor:
+        """Forwards batch of video/audio frames over modules.
+
+        Args:
+            batch (dict[str, Tensor]): dictionary with batch of video and audio sequences.
+                Should contains `video_frames` and `audio_frames`.
+
+        Returns:
+            Tensor: batch of logits.
+        """
+
         vframes, aframes = batch["video_frames"], batch["audio_frames"]
 
         if self.video_model is not None:
@@ -103,7 +153,8 @@ class LieDetector(BaseModule):
 
         return logits
 
-    def init_weights(self):
+    def init_weights(self) -> None:
+        """Recursively initializes weights of modules from configs."""
         if self.use_embed:
             trunc_normal_(self.pos_embeds, std=0.02)
             trunc_normal_(self.cls_tokens, std=0.02)
@@ -115,20 +166,38 @@ class LieDetector(BaseModule):
 
 
 class LieDetectorRunner(dl.Runner):
+    """Base Lie Detector Runner."""
+
     @torch.no_grad()
-    def predict_batch(self, batch):
+    def predict_batch(self, batch: dict[str, Tensor]) -> Tensor:
+        """Predicts indexes of target classes over batch.
+
+        Args:
+            batch (dict[str, Tensor]): dictionary with batch of video and audio sequences.
+
+        Returns:
+            Tensor: batch of target class indexes.
+        """
         logits = self.model(batch)
         probs = torch.sigmoid(logits).argmax(dim=1)
 
         return probs
 
-    def predict_sample(self, sample):
+    def predict_sample(self, sample: dict[str, Tensor]) -> Tensor:
+        """Predicts index of target classes over single sample.
+
+        Args:
+            sample (dict[str, Tensor]): dictionary with video and audio sequences.
+
+        Returns:
+            Tensor: target class index.
+        """
         sample["video_frames"] = rearrange(sample["video_frames"], "(b t) c h w -> b t c h w", b=1)
         sample["audio_frames"] = rearrange(sample["audio_frames"], "(b c) t -> b c t", b=1)
 
         return self.predict_batch(sample)
 
-    def handle_batch(self, batch):
+    def handle_batch(self, batch: dict[str, Tensor]) -> None:
         _, _, labels = batch["video_frames"], batch["audio_frames"], batch["labels"]
 
         logits = self.model(batch)
