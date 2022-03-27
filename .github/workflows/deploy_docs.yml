@@ -6,6 +6,7 @@ on:
       - master
     paths:
       - docs/**
+      - .github/workflows/deploy_docs.yml
 
 jobs:
   build:
@@ -27,4 +28,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           force_orphan: true
           publish_branch: gh-pages
-          publish_dir: docs/_build/
+          publish_dir: docs/_build/html/
