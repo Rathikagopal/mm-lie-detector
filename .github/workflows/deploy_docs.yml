@@ -1,14 +1,14 @@
-name: docs
+name: Deploy docs on GitHub Pages
 
 on:
   push:
     branches:
       - master
+    paths:
+      - docs
 
 jobs:
-
-  build-docs:
-    name: build-docs
+  build:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -18,11 +18,13 @@ jobs:
         python-version: [3.9]
         requires: ['latest']
     steps:
-      - name: Deploy docs on gh-pages
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
         with:
-          publish_branch: gh-pages
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/_build/
           force_orphan: true
+          publish_branch: gh-pages
+          publish_dir: docs/_build/
