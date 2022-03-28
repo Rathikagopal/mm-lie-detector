@@ -232,7 +232,7 @@ By default `self.label_key == "label"`,
 so your method should return a dict object which contains key `label`,
 or you can pass `label_key` kwarg to a `CustomDataset` constructor.
 
-.. _`VideoFolder`: liedet/data/video_folder.py
+.. _`VideoFolder`: api/data/video_folder.html
 .. _`RAVDESS`: https://paperswithcode.com/dataset/ravdess
 
 If you would like to use this class in the config files
@@ -312,7 +312,7 @@ For example, `torchvision`_, `torchaudio`_, `torchtext`_,
 See configuration examples in `configs/`_ folder for more information.
 
 .. _`torch.nn.Model`: https://pytorch.org/docs/stable/generated/torch.nn.Module.html
-.. _`configs/`: configs/
+.. _`configs/`: https://github.com/digital-profiling/mm-lie-detector/tree/master/configs
 .. _`torchvision`: https://github.com/pytorch/vision
 .. _`torchaudio`: https://github.com/pytorch/audio
 .. _`torchtext`: https://github.com/pytorch/text
@@ -322,13 +322,22 @@ See configuration examples in `configs/`_ folder for more information.
 
 
 .. toctree::
-   :caption: Getting started
-   :maxdepth: 2
+    :hidden:
+    :caption: Getting started
+    :maxdepth: 2
 
-   getting_started/installation
-   getting_started/configs_hub
+    getting_started/installation
+    getting_started/configs_hub
 
 .. toctree::
+    :hidden:
+    :glob:
+    :caption: Examples
+
+    Training / Validation / Inference example <examples/train_valid_infer>
+
+.. toctree::
+    :hidden:
     :glob:
     :caption: API
 

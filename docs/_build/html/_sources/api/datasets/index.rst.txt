@@ -2,10 +2,9 @@ Datasets
 =========
 
 .. toctree::
-    :hidden:
 
-    Interviews <interviews>
-    RAVDESS <ravdess>
+    interviews <interviews>
+    ravdess <ravdess>
 
 
 Interviews

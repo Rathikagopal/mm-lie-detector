@@ -157,17 +157,20 @@
 <li class="toctree-l1"><a class="reference internal" href="getting_started/installation.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started/configs_hub.html">Configurations Hub</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples/train_valid_infer.html">Training / Validation / Inference example</a></li>
+</ul>
 <p class="caption" role="heading"><span class="caption-text">API</span></p>
 <ul>
 <li class="toctree-l1 has-children"><a class="reference internal" href="api/data/index.html">liedet.data</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="api/data/video_reader.html">AVReader</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/data/video_reader.html">VideoReader</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/data/video_folder.html">VideoFolder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/data/video_reader.html">video_reader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/data/video_folder.html">video_folder</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="api/datasets/index.html">liedet.datasets</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="api/datasets/interviews.html">Interviews</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/datasets/ravdess.html">RAVDESS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/interviews.html">interviews</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/ravdess.html">ravdess</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="api/models/index.html">liedet.models</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -367,7 +370,7 @@ you can use the following command:</p>
 <section id="custom-dataset">
 <h3>4.1 Custom dataset<a class="headerlink" href="#custom-dataset" title="Permalink to this headline">#</a></h3>
 <p>If a custom dataset has the following structure,
-you can use <a class="reference external" href="liedet/data/video_folder.py">VideoFolder</a> class.
+you can use <a class="reference external" href="api/data/video_folder.html">VideoFolder</a> class.
 It extracts target class name (<cite>int</cite>) from a file name.</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>data/custom_dataset/
     |
@@ -383,7 +386,7 @@ It extracts target class name (<cite>int</cite>) from a file name.</p>
 </pre></div>
 </div>
 <p>If a custom dataset has an other structure,
-you can inherit <a class="reference external" href="liedet/data/video_folder.py">VideoFolder</a> class and overwrite <cite>get_meta</cite> method.</p>
+you can inherit <a class="reference external" href="api/data/video_folder.html">VideoFolder</a> class and overwrite <cite>get_meta</cite> method.</p>
 <p>For example, <a class="reference external" href="https://paperswithcode.com/dataset/ravdess">RAVDESS</a> dataset uses the following filename structure,
 where <cite>emotion</cite> is a label:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&lt;MODALITY&gt;-&lt;VOICE&gt;-&lt;EMOTION&gt;-&lt;INTENSITY&gt;-&lt;STATEMEN&gt;-&lt;REPETITION&gt;-&lt;ACTOR&gt;.mp4
@@ -469,7 +472,7 @@ The model should be the submodule of <a class="reference external" href="https:/
 <section id="modifying-training-validation-inference-parameters">
 <h3>4.3 Modifying training/validation/inference parameters<a class="headerlink" href="#modifying-training-validation-inference-parameters" title="Permalink to this headline">#</a></h3>
 <p>All pre-defined configurations are stored in separate files
-in <a class="reference external" href="configs/">configs/</a> directory.
+in <a class="reference external" href="https://github.com/digital-profiling/mm-lie-detector/tree/master/configs">configs/</a> directory.
 For modifying parameters like batch_size, dataset,
 pre-processing pipeline, model configuration and its parts,
 learning rate, metrics, callbacks, critetion and other and other,
@@ -478,109 +481,12 @@ you can just open and edit existing configuration file or copy it and edit.</p>
 as long as they are compatible with pytorch.
 For example, <a class="reference external" href="https://github.com/pytorch/vision">torchvision</a>, <a class="reference external" href="https://github.com/pytorch/audio">torchaudio</a>, <a class="reference external" href="https://github.com/pytorch/text">torchtext</a>,
 <a class="reference external" href="https://github.com/rwightman/pytorch-image-models">timm</a>, <a class="reference external" href="https://github.com/open-mmlab">open-mmlab ecosystem</a>, <a class="reference external" href="https://github.com/BloodAxe/pytorch-toolbelt">pytorch-toolbelt</a>, and others.</p>
-<p>See configuration examples in <a class="reference external" href="configs/">configs/</a> folder for more information.</p>
+<p>See configuration examples in <a class="reference external" href="https://github.com/digital-profiling/mm-lie-detector/tree/master/configs">configs/</a> folder for more information.</p>
 <div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="getting_started/installation.html">Quickstart</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="getting_started/installation.html#step-1-installation-docker">Step 1 - Installation: Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="getting_started/installation.html#or-step-1-installation-conda">or Step 1 - Installation: Conda</a></li>
-<li class="toctree-l2"><a class="reference internal" href="getting_started/installation.html#step-2-download-datasets-and-weights-of-the-pretrained-models">Step 2 - Download datasets and weights of the pretrained models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="getting_started/installation.html#step-3-train-validate-inference-models">Step 3 - Train / Validate / Inference models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="getting_started/installation.html#step-4-customization">Step 4 - Customization</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="getting_started/configs_hub.html">Configurations Hub</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="getting_started/configs_hub.html#visual-only">Visual Only</a></li>
-<li class="toctree-l2"><a class="reference internal" href="getting_started/configs_hub.html#audial-only">Audial Only</a></li>
-<li class="toctree-l2"><a class="reference internal" href="getting_started/configs_hub.html#audio-visual">Audio-Visual</a></li>
-</ul>
-</li>
-</ul>
 </div>
 <div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="api/data/index.html">liedet.data</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="api/data/index.html#avreader">AVReader</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/data/index.html#videoreader">VideoReader</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/data/index.html#videofolder">VideoFolder</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="api/datasets/index.html">liedet.datasets</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="api/datasets/index.html#interviews">Interviews</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/datasets/index.html#ravdess">RAVDESS</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="api/models/index.html">liedet.models</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="api/models/backbones/index.html">backbones</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="api/models/backbones/ast.html">ast</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/models/backbones/timesformer.html">timesformer</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="api/models/backbones/timesformer.html#patchembed">PatchEmbed</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/models/backbones/timesformer.html#transformer">Transformer</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="api/models/backbones/timesformer.html#transformerencoder">TransformerEncoder</a></li>
-</ul>
-</li>
-<li class="toctree-l4"><a class="reference internal" href="api/models/backbones/timesformer.html#attention-layers">Attention Layers</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="api/models/backbones/timesformer.html#dividedtemporalattentionwithnorm">DividedTemporalAttentionWithNorm</a></li>
-<li class="toctree-l5"><a class="reference internal" href="api/models/backbones/timesformer.html#dividedspatialattentionwithnorm">DividedSpatialAttentionWithNorm</a></li>
-</ul>
-</li>
-<li class="toctree-l4"><a class="reference internal" href="api/models/backbones/timesformer.html#feed-forward">Feed-Forward</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="api/models/backbones/timesformer.html#ffnwithnorm">FFNWithNorm</a></li>
-</ul>
-</li>
-<li class="toctree-l4"><a class="reference internal" href="api/models/backbones/timesformer.html#id4">TimeSformer</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="api/models/backbones/mm_transformer.html">mm_transformer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/models/backbones/index.html#dividing-images-to-sequence-of-pathches">Dividing images to sequence of pathches</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="api/models/backbones/index.html#patchembed">PatchEmbed</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="api/models/backbones/index.html#transformer">Transformer</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="api/models/backbones/index.html#transformerencoder">TransformerEncoder</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="api/models/backbones/index.html#attention-layers">Attention Layers</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="api/models/backbones/index.html#dividedtemporalattentionwithnorm">DividedTemporalAttentionWithNorm</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/models/backbones/index.html#dividedspatialattentionwithnorm">DividedSpatialAttentionWithNorm</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="api/models/backbones/index.html#feed-forward">Feed-Forward</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="api/models/backbones/index.html#ffnwithnorm">FFNWithNorm</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="api/models/backbones/index.html#multimodal-transformer">Multimodal Transformer</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="api/models/heads/index.html">heads</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="api/models/heads/ast_head.html">ast_head</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/models/heads/timesformer_head.html">timesformer_head</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/models/heads/iou_aware.html">iou_aware</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="api/models/necks/index.html">necks</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="api/models/necks/inception.html">inception</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/models/necks/index.html#inception">Inception</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="api/models/detectors/index.html">detectors</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="api/models/detectors/audio.html">audio</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/models/detectors/landmarks.html">landmarks</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/models/detectors/tinaface.html">tinaface</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/models/detectors/index.html#audial-detectors">Audial Detectors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/models/detectors/index.html#visual-detectors">Visual Detectors</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="api/models/detectors/index.html#landmarks-detectors">Landmarks Detectors</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/models/detectors/index.html#face-detectors">Face Detectors</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="api/models/e2e.html">e2e</a></li>
-</ul>
-</li>
-</ul>
+</div>
+<div class="toctree-wrapper compound">
 </div>
 </section>
 </section>

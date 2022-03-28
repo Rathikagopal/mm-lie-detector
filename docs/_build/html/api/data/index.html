@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Video Reader" href="video_reader.html" /><link rel="prev" title="Configurations Hub" href="../../getting_started/configs_hub.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Video Reader" href="video_reader.html" /><link rel="prev" title="Model Training / Validation / Inference Example" href="../../examples/train_valid_infer.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.03.04"/>
         <title>Data - Mutimodal Lie Detector documentation</title>
@@ -157,17 +157,20 @@
 <li class="toctree-l1"><a class="reference internal" href="../../getting_started/installation.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../getting_started/configs_hub.html">Configurations Hub</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/train_valid_infer.html">Training / Validation / Inference example</a></li>
+</ul>
 <p class="caption" role="heading"><span class="caption-text">API</span></p>
 <ul class="current">
 <li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">liedet.data</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="video_reader.html">AVReader</a></li>
-<li class="toctree-l2"><a class="reference internal" href="video_reader.html">VideoReader</a></li>
-<li class="toctree-l2"><a class="reference internal" href="video_folder.html">VideoFolder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video_reader.html">video_reader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video_folder.html">video_folder</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../datasets/index.html">liedet.datasets</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../datasets/interviews.html">Interviews</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../datasets/ravdess.html">RAVDESS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datasets/interviews.html">interviews</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datasets/ravdess.html">ravdess</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../models/index.html">liedet.models</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -231,6 +234,14 @@
           <section id="data">
 <h1>Data<a class="headerlink" href="#data" title="Permalink to this headline">#</a></h1>
 <div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="video_reader.html">video_reader</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="video_reader.html#avreader">AVReader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video_reader.html#videoreader">VideoReader</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="video_folder.html">video_folder</a></li>
+</ul>
 </div>
 <section id="avreader">
 <h2>AVReader<a class="headerlink" href="#avreader" title="Permalink to this headline">#</a></h2>
@@ -665,14 +676,14 @@ VideoFolder: validation subset.</p>
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="../../getting_started/configs_hub.html">
+          <a class="prev-page" href="../../examples/train_valid_infer.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Configurations Hub</div>
+                <div class="title">Model Training / Validation / Inference Example</div>
                 
               </div>
             </a>

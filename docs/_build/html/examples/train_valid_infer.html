@@ -1,0 +1,624 @@
+<!doctype html>
+<html class="no-js">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Data" href="../api/data/index.html" /><link rel="prev" title="Configurations Hub" href="../getting_started/configs_hub.html" />
+
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.03.04"/>
+        <title>Model Training / Validation / Inference Example - Mutimodal Lie Detector documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=935aa2abcc5c1da4283d1dc201fb1f0add16d23a" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">Mutimodal Lie Detector  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  
+  <span class="sidebar-brand-text">Mutimodal Lie Detector  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/installation.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/configs_hub.html">Configurations Hub</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul class="current">
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Training / Validation / Inference example</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/data/index.html">liedet.data</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/data/video_reader.html">video_reader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/data/video_folder.html">video_folder</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/datasets/index.html">liedet.datasets</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/datasets/interviews.html">interviews</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/datasets/ravdess.html">ravdess</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/models/index.html">liedet.models</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/models/backbones/index.html">backbones</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/models/backbones/ast.html">ast</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/models/backbones/timesformer.html">timesformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/models/backbones/mm_transformer.html">mm_transformer</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/models/heads/index.html">heads</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/models/heads/ast_head.html">ast_head</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/models/heads/timesformer_head.html">timesformer_head</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/models/heads/iou_aware.html">iou_aware</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/models/necks/index.html">necks</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/models/necks/inception.html">inception</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/models/detectors/index.html">detectors</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/models/detectors/audio.html">audio</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/models/detectors/landmarks.html">landmarks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/models/detectors/tinaface.html">tinaface</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/models/e2e.html">e2e</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="model-training-validation-inference-example">
+<h1>Model Training / Validation / Inference Example<a class="headerlink" href="#model-training-validation-inference-example" title="Permalink to this headline">#</a></h1>
+<section id="cli-way">
+<h2>CLI way<a class="headerlink" href="#cli-way" title="Permalink to this headline">#</a></h2>
+<p>The simplest way is to use <a class="reference external" href="https://github.com/digital-profiling/mm-lie-detector/blob/master/train.py">train.py</a> / <a class="reference external" href="https://github.com/digital-profiling/mm-lie-detector/blob/master/valid.py">valid.py</a>  / <a class="reference external" href="https://github.com/digital-profiling/mm-lie-detector/blob/master/infer.py">infer.py</a> files
+and one of pre-defined <a class="reference external" href="https://github.com/digital-profiling/mm-lie-detector/tree/master/configs">configuration files</a>.</p>
+<section id="train-model">
+<h3>Train model<a class="headerlink" href="#train-model" title="Permalink to this headline">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># SYNTAX: python train.py --config &lt;PATH TO CONFIG FILE&gt;</span>
+
+<span class="c1"># for example</span>
+python train.py --config configs/landmarks_transformer.py
+</pre></div>
+</div>
+</section>
+<section id="evaluate-model">
+<h3>Evaluate model<a class="headerlink" href="#evaluate-model" title="Permalink to this headline">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># SYNTAX: python valid.py --config &lt;PATH TO CONFIG FILE&gt;</span>
+
+<span class="c1"># for example</span>
+python valid.py --config configs/landmarks_transformer.py
+</pre></div>
+</div>
+</section>
+<section id="inference-model-on-custom-video">
+<h3>Inference model on custom video<a class="headerlink" href="#inference-model-on-custom-video" title="Permalink to this headline">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># SYNTAX: python infer.py --config &lt;PATH TO CONFIG FILE&gt; --video &lt;PATH TO VIDEO FILE&gt;</span>
+
+<span class="c1"># for example</span>
+python infer.py --config configs/landmarks_transformer.py --video assets/example.mp4
+</pre></div>
+</div>
+</section>
+</section>
+<section id="manual-way">
+<h2>Manual way<a class="headerlink" href="#manual-way" title="Permalink to this headline">#</a></h2>
+<p>For example, let’s try to classify truth and lies on video interviews.
+To solve this problem, let’s train, validate and inference Transformer Encoder
+on face landmarks and rotation angles extracted from 10 seconds of video
+(stream of images) with 10 video frames per second, 320 pixels height
+and 480 pixels in width and
+audio features extracted from corresponding audio waves
+with 16000 sample rate and single mono channel.</p>
+<p>Let’s divide dataset on training and validation subsets
+with 0.2 ratio of validation part.</p>
+<section id="build-dataset">
+<h3>Build dataset<a class="headerlink" href="#build-dataset" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Config way</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mmcv.utils</span> <span class="kn">import</span> <span class="n">Config</span>
+
+<span class="kn">from</span> <span class="nn">liedet.datasets</span> <span class="kn">import</span> <span class="n">build_dataset</span>
+
+<span class="n">dataset_cfg</span> <span class="o">=</span> <span class="n">Config</span><span class="o">.</span><span class="n">fromfile</span><span class="p">(</span><span class="s2">"configs/datasets/interviews.py"</span><span class="p">)</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">build_dataset</span><span class="p">(</span><span class="n">dataset_cfg</span><span class="p">)</span>
+<span class="n">train_set</span><span class="p">,</span> <span class="n">valid_set</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">dataset_cfg</span><span class="o">.</span><span class="n">split</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Class way</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">liedet.datasets</span> <span class="kn">import</span> <span class="n">Interviews</span>
+
+<span class="c1">#</span>
+<span class="c1"># Default parameters</span>
+<span class="c1">#</span>
+
+<span class="c1"># target video fps, real video fps is adjusted to this value</span>
+<span class="n">video_fps</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="c1"># target audio fps (sample rate), real audio fps is adjusted to this value</span>
+<span class="n">audio_fps</span> <span class="o">=</span> <span class="mi">16000</span>
+<span class="c1"># time window in seconds</span>
+<span class="n">window_secs</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="c1"># time window in video frames</span>
+<span class="n">window</span> <span class="o">=</span> <span class="n">video_fps</span> <span class="o">*</span> <span class="n">window_secs</span>
+
+<span class="c1"># height of video frame</span>
+<span class="n">height</span> <span class="o">=</span> <span class="mi">320</span>
+<span class="c1"># width of video frame</span>
+<span class="n">width</span> <span class="o">=</span> <span class="mi">480</span>
+
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">Interviews</span><span class="p">(</span>
+    <span class="n">root</span><span class="o">=</span><span class="s2">"data/interviews"</span><span class="p">,</span>
+    <span class="n">video_fps</span><span class="o">=</span><span class="n">video_fps</span><span class="p">,</span>
+    <span class="n">audio_fps</span><span class="o">=</span><span class="n">audio_fps</span><span class="p">,</span>
+    <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">,</span>
+    <span class="c1"># target height of video frame,</span>
+    <span class="c1">#  real height is adjusted to this value</span>
+    <span class="n">height</span><span class="o">=</span><span class="mi">320</span><span class="p">,</span>
+    <span class="c1"># target width of video frame,</span>
+    <span class="c1">#  real width is adjusted to this value</span>
+    <span class="n">width</span><span class="o">=</span><span class="mi">480</span><span class="p">,</span>
+    <span class="c1"># target number of audio channel,</span>
+    <span class="c1">#  True is single mono channel,</span>
+    <span class="c1">#  otherwise two stereo channels are used</span>
+    <span class="n">mono</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">train_set</span><span class="p">,</span> <span class="n">valid_set</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">split</span><span class="p">(</span>
+    <span class="n">valid_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="c1"># return balanced validation subset with respect to target labels</span>
+    <span class="n">balanced_valid_set</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="c1"># use whole files to split</span>
+    <span class="n">by_file</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>The <cite>Interviews</cite> dataset is already implement <cite>torch.utils.data.Dataset</cite>,
+so it can be directly passed to <cite>torch.utils.data.Dataloader</cite>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">Dataloader</span>
+
+<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">16</span>
+
+<span class="n">loaders</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+    <span class="n">train_loader</span><span class="o">=</span><span class="n">Dataloader</span><span class="p">(</span><span class="n">train_set</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="n">valid_loader</span><span class="o">=</span><span class="n">Dataloader</span><span class="p">(</span><span class="n">valid_set</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="build-model">
+<h3>Build model<a class="headerlink" href="#build-model" title="Permalink to this headline">#</a></h3>
+<p>Next, let’s build our model, criterion and optimizer.</p>
+<ul class="simple">
+<li><p>Config way</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">optim</span>
+
+<span class="kn">from</span> <span class="nn">liedet.models.registry</span> <span class="kn">import</span> <span class="n">build</span>
+
+<span class="n">model_cfg</span> <span class="o">=</span> <span class="n">Config</span><span class="o">.</span><span class="n">fromfile</span><span class="p">(</span><span class="s2">"configs/landmarks_audio_transformer.py"</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">build</span><span class="p">(</span><span class="n">model_cfg</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+
+<span class="n">criterion</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span><span class="p">()</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Class way</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch.nn</span> <span class="kn">import</span> <span class="n">TransformerEncoderLayer</span>
+
+<span class="kn">from</span> <span class="nn">liedet.models</span> <span class="kn">import</span> <span class="n">LieDetector</span><span class="p">,</span> <span class="n">FaceLandmarks</span><span class="p">,</span> <span class="n">AudioFeatures</span><span class="p">,</span> <span class="n">TransformerEncoder</span>
+
+<span class="c1"># number of features (landmarks + angles + audio features == features_dims)</span>
+<span class="n">features_dims</span> <span class="o">=</span> <span class="mi">1455</span>
+<span class="c1"># size of embedding  (features_dims --(Linear)--&gt; embed_dims)</span>
+<span class="n">embed_dims</span> <span class="o">=</span> <span class="mi">512</span>
+<span class="c1"># number of classes  (binary == 2)</span>
+<span class="n">num_classes</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="n">landmarks_model</span> <span class="o">=</span> <span class="n">FaceLandmarks</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">)</span>
+<span class="c1"># load pre-trained weights of rotation angles regressor</span>
+<span class="n">landmarks_model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">"weights/angles_regressor.pth"</span><span class="p">,</span> <span class="n">map_location</span><span class="o">=</span><span class="s2">"cpu"</span><span class="p">))</span>
+
+<span class="n">audio_model</span> <span class="o">=</span> <span class="n">AudioFeatures</span><span class="p">(</span><span class="n">fps</span><span class="o">=</span><span class="n">window_secs</span><span class="p">,</span> <span class="n">chunk_length</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sr</span><span class="o">=</span><span class="n">audio_fps</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">time_model</span> <span class="o">=</span> <span class="n">TransformerEncoder</span><span class="p">(</span>
+    <span class="n">encoder_layer</span><span class="o">=</span><span class="n">TransformerEncoderLayer</span><span class="p">(</span>
+        <span class="n">d_model</span><span class="o">=</span><span class="n">embed_dims</span><span class="p">,</span>
+        <span class="c1"># number of parallel computed self-attentions</span>
+        <span class="n">nhead</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+        <span class="c1"># size of embedding inside feed-forward network</span>
+        <span class="n">dim_feedforward</span><span class="o">=</span><span class="mi">512</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span>
+        <span class="c1"># probability of dropout</span>
+        <span class="n">dropout</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="c1"># batch is the first dimension</span>
+        <span class="n">batch_first</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">cls_head</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_features</span><span class="o">=</span><span class="n">embed_dims</span><span class="p">,</span> <span class="n">out_features</span><span class="o">=</span><span class="n">num_classes</span><span class="p">)</span>
+
+<span class="c1"># model pipeline</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">LieDetector</span><span class="p">(</span>
+    <span class="n">video_model</span><span class="o">=</span><span class="n">landmarks_model</span><span class="p">,</span>
+    <span class="n">audio_model</span><span class="o">=</span><span class="n">audio_model</span><span class="p">,</span>
+    <span class="n">features_dims</span><span class="o">=</span><span class="n">features_dims</span><span class="p">,</span>
+    <span class="n">embed_dims</span><span class="o">=</span><span class="n">embed_dims</span><span class="p">,</span>
+    <span class="n">time_model</span><span class="o">=</span><span class="n">time_model</span><span class="p">,</span>
+    <span class="n">cls_head</span><span class="o">=</span><span class="n">cls_head</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">criterion</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span><span class="p">()</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
+</pre></div>
+</div>
+</section>
+<section id="id1">
+<h3>Train model<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h3>
+<p>Finally, let’s use <a class="reference external" href="https://github.com/catalyst-team/catalyst">catalyst</a> framework to train model.</p>
+<ul class="simple">
+<li><p>Catalyst way</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">catalyst</span> <span class="kn">import</span> <span class="n">dl</span>
+
+<span class="kn">from</span> <span class="nn">liedet.models</span> <span class="kn">import</span> <span class="n">LieDetectorRunner</span>
+
+<span class="n">runner</span> <span class="o">=</span> <span class="n">LieDetectorRunner</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+<span class="n">runner</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
+    <span class="n">criterion</span><span class="o">=</span><span class="n">criterion</span><span class="p">,</span>
+    <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span>
+    <span class="n">loaders</span><span class="o">=</span><span class="n">loaders</span><span class="p">,</span>
+    <span class="n">num_epochs</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+    <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span>
+        <span class="c1"># use criterion and calculate loss</span>
+        <span class="n">dl</span><span class="o">.</span><span class="n">CriterionCallback</span><span class="p">(</span><span class="n">input_key</span><span class="o">=</span><span class="s2">"logits"</span><span class="p">,</span> <span class="n">target_key</span><span class="o">=</span><span class="s2">"labels"</span><span class="p">,</span> <span class="n">metric_key</span><span class="o">=</span><span class="s2">"loss"</span><span class="p">),</span>
+        <span class="c1"># backward loss</span>
+        <span class="n">dl</span><span class="o">.</span><span class="n">BackwardCallback</span><span class="p">(</span><span class="n">metric_key</span><span class="o">=</span><span class="s2">"loss"</span><span class="p">),</span>
+        <span class="c1"># step optimizer</span>
+        <span class="n">dl</span><span class="o">.</span><span class="n">OptimizerCallback</span><span class="p">(</span><span class="n">metric_key</span><span class="o">=</span><span class="s2">"loss"</span><span class="p">),</span>
+        <span class="c1"># calculate runtime accuracy</span>
+        <span class="n">dl</span><span class="o">.</span><span class="n">AccuracyCallback</span><span class="p">(</span><span class="n">input_key</span><span class="o">=</span><span class="s2">"logits"</span><span class="p">,</span> <span class="n">target_key</span><span class="o">=</span><span class="s2">"labels"</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+        <span class="c1"># early stop training if last 15 epochs models is outfitted</span>
+        <span class="c1">#   use validation loss to monitor it</span>
+        <span class="n">dl</span><span class="o">.</span><span class="n">EarlyStoppingCallback</span><span class="p">(</span><span class="n">patience</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">loader_key</span><span class="o">=</span><span class="s2">"valid_loader"</span><span class="p">,</span> <span class="n">metric_key</span><span class="o">=</span><span class="s2">"loss"</span><span class="p">,</span> <span class="n">minimize</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="c1"># checkpoint best model and model after last epoch</span>
+        <span class="n">dl</span><span class="o">.</span><span class="n">CheckpointCallback</span><span class="p">(</span><span class="n">logdir</span><span class="o">=</span><span class="s2">"./logs"</span><span class="p">,</span> <span class="n">loader_key</span><span class="o">=</span><span class="s2">"valid_loader"</span><span class="p">,</span> <span class="n">metric_key</span><span class="o">=</span><span class="s2">"loss"</span><span class="p">,</span> <span class="n">minimize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">topk</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">load_best_on_end</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Manual way (#TODO)</p></li>
+</ul>
+</section>
+<section id="id2">
+<h3>Evaluate model<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h3>
+<p>When the model is trained, let’s evaluate it on validation subset
+to assess final accuracy.</p>
+<ul class="simple">
+<li><p>Catalyst way</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">runner</span><span class="o">.</span><span class="n">evaluate_loader</span><span class="p">(</span>
+    <span class="n">loader</span><span class="o">=</span><span class="n">loaders</span><span class="p">[</span><span class="s2">"valid_loader"</span><span class="p">],</span>
+    <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span>
+        <span class="c1"># transform logits to probabilities using sigmoid function</span>
+        <span class="n">dl</span><span class="o">.</span><span class="n">BatchTransformCallback</span><span class="p">(</span>
+            <span class="n">input_key</span><span class="o">=</span><span class="s2">"logits"</span><span class="p">,</span>
+            <span class="n">output_key</span><span class="o">=</span><span class="s2">"scores"</span><span class="p">,</span>
+            <span class="n">scope</span><span class="o">=</span><span class="s2">"on_batch_end"</span><span class="p">,</span>
+            <span class="n">transform</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="c1"># calculate final accuracy</span>
+        <span class="n">dl</span><span class="o">.</span><span class="n">AccuracyCallback</span><span class="p">(</span><span class="n">input_key</span><span class="o">=</span><span class="s2">"scores"</span><span class="p">,</span> <span class="n">target_key</span><span class="o">=</span><span class="s2">"labels"</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+    <span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Manual way (#TODO)</p></li>
+</ul>
+</section>
+<section id="id3">
+<h3>Inference model on custom video<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h3>
+<p>Let’s try to inference obtained model on custom video file.</p>
+<ul class="simple">
+<li><p>Catalyst way</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">liedet.data</span> <span class="kn">import</span> <span class="n">VideoReader</span>
+
+<span class="c1"># Config way</span>
+<span class="n">video_reader</span> <span class="o">=</span> <span class="n">VideoReader</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="s2">"assets/example.mp4"</span><span class="p">,</span> <span class="o">**</span><span class="n">dataset_cfg</span><span class="p">)</span>
+
+<span class="c1"># Class way</span>
+<span class="n">video_reader</span> <span class="o">=</span> <span class="n">VideoReader</span><span class="p">(</span>
+    <span class="n">uri</span><span class="o">=</span><span class="s2">"assets/example.mp4"</span><span class="p">,</span>
+    <span class="n">video_fps</span><span class="o">=</span><span class="n">video_fps</span><span class="p">,</span>
+    <span class="n">audio_fps</span><span class="o">=</span><span class="n">audio_fps</span><span class="p">,</span>
+    <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">,</span>
+    <span class="c1"># target height of video frame,</span>
+    <span class="c1">#  real height is adjusted to this value</span>
+    <span class="n">height</span><span class="o">=</span><span class="mi">320</span><span class="p">,</span>
+    <span class="c1"># target width of video frame,</span>
+    <span class="c1">#  real width is adjusted to this value</span>
+    <span class="n">width</span><span class="o">=</span><span class="mi">480</span><span class="p">,</span>
+    <span class="c1"># target number of audio channel,</span>
+    <span class="c1">#  True is single mono channel,</span>
+    <span class="c1">#  otherwise two stereo channels are used</span>
+    <span class="n">mono</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="k">for</span> <span class="n">start</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">window</span><span class="p">):</span>
+    <span class="c1"># extract single window</span>
+    <span class="n">sample</span> <span class="o">=</span> <span class="n">video_reader</span><span class="p">[</span><span class="n">start</span> <span class="p">:</span> <span class="n">start</span> <span class="o">+</span> <span class="n">window</span><span class="p">]</span>
+
+    <span class="c1"># predict label for extracted window</span>
+    <span class="n">window_label</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">predict_sample</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Manual way (#TODO)</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="../api/data/index.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Data</div>
+              </div>
+              <svg><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="../getting_started/configs_hub.html">
+              <svg><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Configurations Hub</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, Michael Sinko
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Model Training / Validation / Inference Example</a><ul>
+<li><a class="reference internal" href="#cli-way">CLI way</a><ul>
+<li><a class="reference internal" href="#train-model">Train model</a></li>
+<li><a class="reference internal" href="#evaluate-model">Evaluate model</a></li>
+<li><a class="reference internal" href="#inference-model-on-custom-video">Inference model on custom video</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#manual-way">Manual way</a><ul>
+<li><a class="reference internal" href="#build-dataset">Build dataset</a></li>
+<li><a class="reference internal" href="#build-model">Build model</a></li>
+<li><a class="reference internal" href="#id1">Train model</a></li>
+<li><a class="reference internal" href="#id2">Evaluate model</a></li>
+<li><a class="reference internal" href="#id3">Inference model on custom video</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/scripts/furo.js"></script>
+    </body>
+</html>

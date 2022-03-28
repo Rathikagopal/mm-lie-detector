@@ -2,11 +2,8 @@ Data
 =====
 
 .. toctree::
-    :hidden:
-
-    AVReader <video_reader>
-    VideoReader <video_reader>
-    VideoFolder <video_folder>
+    video_reader <video_reader>
+    video_folder <video_folder>
 
 
 AVReader
