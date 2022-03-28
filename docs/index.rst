@@ -327,7 +327,6 @@ See configuration examples in `configs/`_ folder for more information.
     :maxdepth: 2
 
     getting_started/installation
-    getting_started/configs_hub
 
 .. toctree::
     :hidden:
