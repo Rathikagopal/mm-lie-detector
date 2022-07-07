@@ -20,7 +20,7 @@
 
 ## 0. Demo
 
-![alt](https://drive.google.com/uc?export=view&id=1HVYlk2TQ_Gv67YizafY2_pzMe5fgCz94)
+![alt](https://drive.google.com/uc?export=view&id=1yqjqNyTKnA3ZP07X0v-1hjQ0m0c7jn2k)
 
 ## 1. Introduction
 
