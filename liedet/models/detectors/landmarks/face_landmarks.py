@@ -32,7 +32,7 @@ class FaceLandmarks(BaseModule):
         min_detection_confidence: float = 0.5,
         min_tracking_confidence: float = 0.5,
         normalize: bool = True,
-        rotate: bool = True,
+        rotate: bool = False,
         init: bool = False,
         **kwargs,
     ):
@@ -149,7 +149,7 @@ class FaceLandmarks(BaseModule):
         if min_value.allclose(max_value):
             return torch.zeros(x.size(), dtype=torch.float).to(x.device)
 
-        return (x - min_value).abs() / (max_value - min_value).abs()
+        return (x - min_value).abs() / (max_value - min_value).abs() - 0.5
 
     def _rotate(self, x: Tensor, axis: Tensor, angles: Tensor) -> Tensor:
         """Rotates landmarks over single axis.
